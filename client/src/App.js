@@ -1,15 +1,12 @@
 import React from 'react'
-import MainPage from './components/MainPage/MainPage'
+import Nav from './Nav/Nav'
 import './App.scss'
 
 function App() {
 
   return (
     <div>
-
-    <MainPage></MainPage>
-
-
+       <Nav></Nav>
     </div>
   )
 }
