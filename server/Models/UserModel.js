@@ -71,6 +71,14 @@ userSchema.methods.generateAuthToken = async function () {
     return token
 }
 
+
+// userSchema.methods.deleteToken = async function() {
+
+//   const user = this
+//   user.update()
+
+// }
+
 userSchema.statics.findByCredentials = async (email, password) => {
     const user = await User.findOne({ email: email})
     if(!user){
@@ -93,6 +101,7 @@ userSchema.pre('save', async function(next) {
     next() 
 })
 
+
 // userSchema.pre('remove', async function(next){
 //     const user = this
 //     await Tank.deleteMany({ owner: user._id})
@@ -103,42 +112,3 @@ userSchema.pre('save', async function(next) {
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;
-
-
-
-// const userSchema = new mongoose.Schema({
-//   username: {
-//     type: String,
-//     required: [true, 'Username is Required'],
-//     unique: true,
-//   },
-//   email: {
-//     type: String,
-//     required: [true, "Email is Required"],
-//     unique: true,
-//   },
-//   password: {
-//     type: String,
-//     required: [true, "Password is Required"],
-//   },
-// });
-
-// userSchema.pre("save", async function (next) {
-//   const salt = await bcrypt.genSalt();
-//   this.password = await bcrypt.hash(this.password, salt);
-//   next();
-// });
-
-// userSchema.statics.login = async function (email, password) {
-//   const user = await this.findOne({ email });
-//   if (user) {
-//     const auth = await bcrypt.compare(password, user.password);
-//     if (auth) {
-//       return user;
-//     }
-//     throw Error("incorrect password");
-//   }
-//   throw Error("incorrect email");
-// };
-
-// module.exports = mongoose.model("Users", userSchema);

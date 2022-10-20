@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useCookies } from "react-cookie";
 import { ToastContainer, toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { createStore } from 'state-pool';
@@ -12,14 +11,14 @@ import { createStore } from 'state-pool';
 function Register() {
 
   // const [username, setUsername] = store.useState("username");
-  const [cookies] = useCookies(["cookie-name"]);
+  const token =  localStorage.getItem("token");
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (cookies.jwt) {
+    if (token) {
       navigate("/");
     }
-  }, [cookies, navigate]);
+  }, [token, navigate]);
 
   const [values, setValues] = useState({ username: "", email: "", password: "" });
 
@@ -42,8 +41,8 @@ function Register() {
          localStorage.setItem('username', response.data.user.username);
        })
        navigate("/");
-     } catch (ex) {
-       console.log(ex);
+     } catch (e) {
+       console.log(e);
      }
     };
 

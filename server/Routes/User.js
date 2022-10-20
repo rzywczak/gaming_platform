@@ -1,8 +1,12 @@
 const express = require('express');
 const User = require('../Models/UserModel');
+const Room = require('../Models/RoomModel');
 const auth = require('../Middlewares/AuthMiddleware')
 const router = new express.Router();
 
+//USER
+
+//register
 router.post("/api/users", async (req, res) => {
   const user = new User(req.body);
   try {
@@ -15,7 +19,7 @@ router.post("/api/users", async (req, res) => {
     res.status(400).send(e);
   }
 });
-
+//login
 router.post('/api/users/login', async (req, res) => {
   try {
     const user = await User.findByCredentials(
@@ -29,7 +33,7 @@ router.post('/api/users/login', async (req, res) => {
   }
 });
 // logout
-router.post('/api/users/logout', auth ,async (req, res) => {
+router.get('/api/users/logout', auth ,async (req, res) => {
     try {
         req.user.tokens = req.user.tokens.filter((token) => {
             return token.token !== req.token
@@ -44,10 +48,51 @@ router.post('/api/users/logout', auth ,async (req, res) => {
 
 //get user data
 router.get("/api/users/:id", auth, async (req, res) => {
-    console.log('data user'+req.user)
+    // console.log('data user'+req.user)
     res.send(req.user)
   
 });
+
+
+//ROOMS
+
+
+//register
+router.post("/api/rooms", async (req, res) => {
+  console.log(req.body)
+  const room = new Room(req.body.data);
+  try {
+    await room.save();
+
+    // const token = await user.generateAuthToken();
+    res.status(201).send({ room });
+  } catch (e) {
+    res.status(400).send(e);
+  }
+});
+//login
+router.post('/api/rooms/login' ,async (req, res) => {
+  try {
+    const room = await Room.findByCredentials(
+      req.body.roomName,
+      req.body.password
+    );
+    // const token = await user.generateAuthToken();
+    res.send({ room });
+  } catch (e) {
+    res.status(400).send();
+  }
+});
+
+
+//get room data
+router.get("/api/rooms/:id", auth, async (req, res) => {
+    // console.log('data user'+req.user)
+    res.send(req.room)
+  
+});
+
+
 
 
 

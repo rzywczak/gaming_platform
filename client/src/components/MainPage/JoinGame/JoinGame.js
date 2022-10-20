@@ -11,14 +11,16 @@ function JoinGame() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { gameType, logOutFunction, username } = location.state || "noSelectedRoom";
-
+  const { gameType } = location.state || "noSelectedRoom";
   const [ selectedGame, setSelectedGame] = useState()
+
+  const username =  localStorage.getItem("username");
+
 
   useEffect(() => {
    
   
-}
+  }
   
   )
   
@@ -40,7 +42,7 @@ function JoinGame() {
     <div className="centered-form">
       <div className="centered-form__box">
         <div className="rooms">
-          <h2>{gameType}</h2>
+          <h2>{gameType[2]}</h2>
           <form onSubmit={(e) => joingameSubmit(e)}>
             <label> {username} </label>
             <label>Nazwa pokoju</label>

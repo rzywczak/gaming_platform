@@ -2,17 +2,17 @@ function axiosAuth() {
 
 const token = localStorage.getItem('token');
 if(token){
-  const headers = {
+  const header = {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${token}`
   }
-  return headers
+  return header
 }else{
-  const headers = {
+  const header = {
     'Content-Type': 'application/json',
     'Authorization': null
   }
-  return headers
+  return header
 }
 }
 
