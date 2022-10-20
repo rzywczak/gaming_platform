@@ -71,12 +71,14 @@ router.post("/api/rooms", async (req, res) => {
   }
 });
 //login
-router.post('/api/rooms/login' ,async (req, res) => {
+router.post('/api/rooms/join' ,async (req, res) => {
   try {
+   
     const room = await Room.findByCredentials(
       req.body.roomName,
       req.body.password
     );
+
     // const token = await user.generateAuthToken();
     res.send({ room });
   } catch (e) {

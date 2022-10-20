@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./JoinGame.scss";
 import { useLocation, useNavigate, useParamsm, Link} from "react-router-dom";
 import CreateGame from "../CreateGame/CreateGame";
+import axiosAuth from "../../../services/axiosAuth"
 import axios from 'axios'
 import io from "socket.io-client";
 
@@ -13,6 +14,7 @@ function JoinGame() {
 
   const { gameType } = location.state || "noSelectedRoom";
   const [ selectedGame, setSelectedGame] = useState()
+  const [values, setValues] = useState({ roomName: "", password: "" });
 
   const username =  localStorage.getItem("username");
 
@@ -24,11 +26,30 @@ function JoinGame() {
   
   )
   
-  const joingameSubmit = (e) => {
+  const joingameSubmit = async (e) => {
     e.preventDefault();
-    console.log('joined Game')
 
-    navigate('/game-room')
+
+    const authResult = axiosAuth();
+
+      if (authResult.Authorization !== null) {
+        console.log(values)
+        try {
+            const {data} = await axios.post(`http://localhost:5000/api/rooms/join`, 
+            {
+              ...values,
+            },
+           { withCredentials: true }
+           )
+           await navigate('/game-room')
+           console.log('joined Game')
+          // console.log(data);
+          }catch (e) {
+          console.log(e);
+        }
+      }
+
+ 
   }
   
 
@@ -45,10 +66,14 @@ function JoinGame() {
           <h2>{gameType[2]}</h2>
           <form onSubmit={(e) => joingameSubmit(e)}>
             <label> {username} </label>
-            <label>Nazwa pokoju</label>
-            <input type="text" name="room" placeholder="Podaj nazwe pokoju" required autoComplete="off"></input>
-            <label>Hasło</label>
-            <input type="password" name="room" placeholder="Podaj hasło" required autoComplete="off"></input>
+            <input type="text" name="roomName" placeholder="Podaj nazwe pokoju" required autoComplete="off"
+                onChange={(e) => setValues({ ...values, [e.target.name]: e.target.value })}
+              ></input>
+              <label>Hasło</label>
+              <input type="password" name="password" placeholder="Podaj hasło" required autoComplete="off"
+                onChange={(e) => setValues({ ...values, [e.target.name]: e.target.value })}
+
+                ></input>
             <button>Dołącz</button>
           </form>
         </div>
