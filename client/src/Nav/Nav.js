@@ -18,7 +18,7 @@ function Nav() {
       <Route path="/login" element={<Login />} />
       <Route path="/" element={<MainPage/>}></Route>
       <Route path="/join-game" element={<JoinGame/>}></Route>
-      <Route path="/create-game" element={<CreateGame/>}></Route>
+      {/* <Route path="/create-game" element={<CreateGame/>}></Route> */}
       <Route path="/game-room" element={<GameRoom/>}></Route>
     </Routes>
   </BrowserRouter>

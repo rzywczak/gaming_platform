@@ -1,11 +1,8 @@
 const mongoose = require("mongoose");
-const bcrypt = require('bcryptjs')
-const validator = require('validator');
 
-
-const roomSchema = new mongoose.Schema(
+const UserInRoomSchema = new mongoose.Schema(
   {
-    roomName: {
+    socketID: {
       type: String,
       require: true,
       trim: true,
@@ -13,14 +10,14 @@ const roomSchema = new mongoose.Schema(
       minlength: 1,
       maxlength: 255,
     },
-    password: {
+    userName: {
       type: String,
       require: true,
       trim: true,
       minlength: 6,
       maxlength: 255,
     },
-    gameType: {
+    roomName: {
         type: String,
         require: true,
         trim: true,
@@ -49,32 +46,18 @@ const roomSchema = new mongoose.Schema(
 //     return userObject
 // }
 
-// join to game 
-roomSchema.statics.findByCredentials = async (roomName, password) => {
+// join to game  // serach User in Room
+UserInRoomSchema.statics.findByCredentials = async (user, room) => {
 
-    const room = await Room.findOne({ roomName: roomName})
-   
-    if(!room){
-        throw new Error('Unable to join')
-    }
-
-    const isMatch = await bcrypt.compare(password, room.password)
-    if(!isMatch){
-
-        throw new Error('Unable to join')
-    }
-
-    return room
+    const userInRoom = await UserInRoom.findOne({ user: user, room: room })
+    const usersInRoom = await UserInRoom.count({room: room})
+    console.log(usersInRoom)
+    return userInRoom
 }
 
+// create room with user 
 
-roomSchema.pre('save', async function(next) {
-  if(this.isModified('password')){
-   this.password = await bcrypt.hash(this.password, 8)
-  }
 
-   next() 
-})
 
 // userSchema.pre('remove', async function(next){
 //     const user = this
@@ -83,6 +66,6 @@ roomSchema.pre('save', async function(next) {
 // })
 
 
-const Room = mongoose.model("Room", roomSchema);
+const UserInRoom = mongoose.model("UserInRoom", UserInRoomSchema);
 
-module.exports = Room;
+module.exports = UserInRoom;

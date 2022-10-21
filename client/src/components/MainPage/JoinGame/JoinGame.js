@@ -9,27 +9,48 @@ import io from "socket.io-client";
 // const socket = io();
 
 function JoinGame() {
+
+
+  
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { gameType } = location.state || "noSelectedRoom";
+
+  useEffect(() => {
+    // console.log(user, room)
+
+    try{
+      const authResult = axiosAuth();
+        if (authResult.Authorization !== null) {
+          
+        }
+        else{
+          navigate("/login");
+      }
+    }
+    catch(e){
+      // console.log(e)
+    } 
+  },[navigate])
+
+  let { gameType } = location.state || {1: "noSelectedRoom", 2: "noSelectedRoom"};
+  if(gameType===undefined){
+    gameType = {1: "noSelectedRoom", 2: "noSelectedRoom"};
+  }
   const [ selectedGame, setSelectedGame] = useState()
   const [values, setValues] = useState({ roomName: "", password: "" });
 
-  const username =  localStorage.getItem("username");
+  const username =  localStorage.getItem("username") || 'please login';
+  
 
 
-  useEffect(() => {
-   
-  
-  }
-  
-  )
+
+
   
   const joingameSubmit = async (e) => {
     e.preventDefault();
 
-
+  const username =  localStorage.getItem("username");
     const authResult = axiosAuth();
 
       if (authResult.Authorization !== null) {
@@ -41,7 +62,7 @@ function JoinGame() {
             },
            { withCredentials: true }
            )
-           await navigate('/game-room')
+           navigate('/game-room', { state: { userName: username, roomName: data.room.roomName}})
            console.log('joined Game')
           // console.log(data);
           }catch (e) {
@@ -59,7 +80,6 @@ function JoinGame() {
 
   return (
     // <div className="join-game">
-
     <div className="centered-form">
       <div className="centered-form__box">
         <div className="rooms">
@@ -78,7 +98,7 @@ function JoinGame() {
           </form>
         </div>
         <div className="create-room">
-          <CreateGame gameType={gameType} username={username} />
+          <CreateGame gameType={gameType} username={username}  />
         </div>
 
         <div>
@@ -92,3 +112,4 @@ function JoinGame() {
   );
 }
 export default JoinGame;
+

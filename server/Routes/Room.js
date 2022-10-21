@@ -1,28 +1,36 @@
 const express = require('express');
+const User = require('../Models/UserModel');
 const Room = require('../Models/RoomModel');
 const auth = require('../Middlewares/AuthMiddleware')
-const router = new express.Router();
+const router= new express.Router();
+
+
+//ROOMS
+
 
 //register
-router.post("/api/rooms", auth ,async (req, res) => {
-  const room = new Room(req.body);
+router.post("/api/rooms", async (req, res) => {
+
+  const room = await new Room(req.body.data);
   try {
-    console.log(req.body)
     await room.save();
 
     // const token = await user.generateAuthToken();
+
     res.status(201).send({ room });
   } catch (e) {
     res.status(400).send(e);
   }
 });
 //login
-router.post('/api/rooms/login', auth ,async (req, res) => {
+router.post('/api/rooms/join' ,async (req, res) => {
   try {
+   
     const room = await Room.findByCredentials(
       req.body.roomName,
       req.body.password
     );
+
     // const token = await user.generateAuthToken();
     res.send({ room });
   } catch (e) {
@@ -37,6 +45,7 @@ router.get("/api/rooms/:id", auth, async (req, res) => {
     res.send(req.room)
   
 });
+
 
 
 

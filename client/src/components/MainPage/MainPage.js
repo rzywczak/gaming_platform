@@ -34,6 +34,10 @@ function MainPage() {
           console.log(e);
         }
       }
+      else {
+        setLogged(false);
+        navigate('/login')
+      }
     };
 
     verifyUser();
