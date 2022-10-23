@@ -145,18 +145,8 @@ const addUser = (user) => {
 
   }
  
-  const whatGame = async (game) => {
-    if(gameName === game){
-      console.log(game)
-    return true
-    }
-    else{
-      return false
-    }
-  }
-  
 
-  const PaperStoneScissors = async (userChoice) => {
+  const paperStoneScissors = async (userChoice) => {
     console.log(userChoice)
     // oczekiwanie na innego gracz buttony disable or deleted
     // gdy gracz 2 wybierze w przeciągu ? 10 sekund ? to wysyla dane do servera i sprawdza kto wygrał
@@ -186,8 +176,8 @@ const addUser = (user) => {
 
           
            {gameName === 'findAPair' && <FindAPair gameType={gameType[1]}></FindAPair> }
-           {gameName === 'maze' && <Maze gameType={gameType[1]}>{console.log(whatGame('maze'))}</Maze> }
-           {gameName ==='paperStoneScissors'&& <PaperStoneScissors gameOptions={PaperStoneScissors} gameType={gameType[1]}></PaperStoneScissors> }
+           {gameName === 'maze' && <Maze gameType={gameType[1]}></Maze> }
+           {gameName ==='paperStoneScissors'&& <PaperStoneScissors paperStoneScissors={paperStoneScissors} gameType={gameType[1]}></PaperStoneScissors> }
            {gameName ==='puns' && <Puns gameType={gameType[1]}></Puns> }
            {gameName ==='ticTacToe' && <TicTacToe gameType={gameType[1]}></TicTacToe> }
 
