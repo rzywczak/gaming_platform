@@ -69,3 +69,10 @@ Aplikacja webowa, na której będzie możliwe rozgrywanie gier w popularne gry l
 
 4. Po dołączniu do pokoju 
 ![image](https://user-images.githubusercontent.com/73279676/197393763-a6cdb1d7-9efc-4e52-bde1-cd230c7c4820.png)
+
+5. Po dołączeniu jednego z graczy 
+![image](https://user-images.githubusercontent.com/73279676/197405487-f9f5416c-99b7-47e6-9866-a19e8aca3a1a.png)
+
+6. po dołączeniu dwóch graczy 
+![image](https://user-images.githubusercontent.com/73279676/197405832-a6bcf4c0-07ba-488b-a525-8de947f11031.png)
+
