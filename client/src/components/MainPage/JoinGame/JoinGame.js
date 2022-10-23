@@ -8,38 +8,51 @@ import io from "socket.io-client";
 
 // const socket = io();
 
+
 function JoinGame() {
 
 
-  
+
   const location = useLocation();
   const navigate = useNavigate();
 
+  const [isLoading, setIsLoading] = useState(false);
+  // const [gameType, setGameType] = useState( {1: "noSelectedRoom", 2: "noSelectedRoom"});
+
+  // const gameTypeSet = () => {
+    const { gameType } = location.state || 'wronga data';
+  //   setGameType(gameType)
+  // }
 
   useEffect(() => {
     // console.log(user, room)
-
     try{
       const authResult = axiosAuth();
-        if (authResult.Authorization !== null) {
-          
-        }
-        else{
+      if (authResult.Authorization === null) { 
           navigate("/login");
+          
+        }    
+         
+      if(gameType === undefined){
+        navigate("/");
+        return 
       }
     }
-    catch(e){
-      // console.log(e)
-    } 
-  },[navigate])
+    catch(error){
+      console.log(error);
+    }
 
-  let { gameType } = location.state || {1: "noSelectedRoom", 2: "noSelectedRoom"};
-  if(gameType===undefined){
-    gameType = {1: "noSelectedRoom", 2: "noSelectedRoom"};
-  }
-  const [ selectedGame, setSelectedGame] = useState()
+    // gameTypeSet()
+    setIsLoading(true)
+  },[navigate, gameType])
+
+
+  // if(gameType===undefined){
+  //   gameType = {1: "noSelectedRoom", 2: "noSelectedRoom"};
+  // }
+
+
   const [values, setValues] = useState({ roomName: "", password: "" });
-
   const username =  localStorage.getItem("username") || 'please login';
   
 
@@ -62,8 +75,8 @@ function JoinGame() {
             },
            { withCredentials: true }
            )
-           navigate('/game-room', { state: { userName: username, roomName: data.room.roomName}})
-           console.log('joined Game')
+           navigate('/game-room', { state: { userName: username, roomName: data.room.roomName, gameType: gameType}})
+          //  console.log('joined Game')
           // console.log(data);
           }catch (e) {
           console.log(e);
@@ -79,7 +92,8 @@ function JoinGame() {
 
 
   return (
-    // <div className="join-game">
+    <>
+    {isLoading &&
     <div className="centered-form">
       <div className="centered-form__box">
         <div className="rooms">
@@ -108,7 +122,9 @@ function JoinGame() {
 
         {/* wyświetlanie dostępnnych pokoji */}
       </div>
-   
+    }
+
+      </>
   );
 }
 export default JoinGame;

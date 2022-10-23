@@ -88,12 +88,14 @@ function MainPage() {
               <Link to={{ pathname: "/join-game" }} state={{ gameType: games.maze}}>
                 <button>{games.maze[2]}</button>
               </Link>
+              <div>
+               <button onClick={logOut}>Wyloguj się</button>
             </div>
+            </div>
+            
           )}
         </div>
-        <div>
-          <button onClick={logOut}>Wyloguj się</button>
-        </div>
+      
       </div>
 
       {/* wyświetlanie dostępnnych pokoji */}
