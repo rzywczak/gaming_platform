@@ -4,9 +4,6 @@ const UserInRoom = require("../Models/UserInRoomModel")
 const socketRouter = (httpServer) => {
     const io = new Server(httpServer)
 
-
-
-
 io.on("connection", (socket) => {
     console.log("WebSocket connection");
 
@@ -34,7 +31,7 @@ io.on("connection", (socket) => {
         const usersNamesInRoom = await UserInRoom.findAllUsersInRoom(roomname)
         await socket.join(roomname)
         const whoConnected = usersNamesInRoom.map(user => user.userName)
-        io.to(roomname).emit('join-info',whoConnected)
+        io.to(roomname).emit('join-info',whoConnected,roomname)
         console.log('user connected '+socket.id+' users in room : '+whoConnected)
         callback()
 
@@ -69,10 +66,10 @@ io.on("connection", (socket) => {
 
 
     socket.on("disconnect", async () => {
-      console.log(socket.id)
+      // console.log(socket.id)
       // const updateUsersTable = true
        const room = await UserInRoom.findRoomBySocketId(socket.id)
-       console.log(room)
+      //  console.log(room)
        if(room!==null) {const usersNamesInRoom = room.userName
      await UserInRoom.deleteOne(room);
    

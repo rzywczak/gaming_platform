@@ -46,9 +46,10 @@ function Login() {
   return (
     <div className="centered-form">
           <div className="centered-form__box">
-    <h2>Log to your Account</h2>
+
     <form onSubmit={(e) => loginSubmit(e)}>
       <div>
+      <h2>Zaloguj się</h2>
         <label htmlFor="email">E-mail</label>
         <input
           type="email"

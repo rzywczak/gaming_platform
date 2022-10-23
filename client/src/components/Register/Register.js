@@ -50,9 +50,10 @@ function Register() {
     <>
           <div className="centered-form">
           <div className="centered-form__box">
-        <h2>Register Account</h2>
+       
         <form onSubmit={(e) => registerSubmit(e)}>
           <div>
+          <h2>Zarejestruj się</h2>
             <label htmlFor="text">Nazwa użytkownika</label>
             <input
               type="text"

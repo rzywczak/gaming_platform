@@ -23,7 +23,7 @@ useEffect(() => {
   }
 
 }
-, []);
+, [navigate]);
 
   const createGame = async (e) => {
     e.preventDefault();
@@ -35,10 +35,9 @@ useEffect(() => {
       if (authResult.Authorization !== null) {
         console.log(values)
         try {
-            const {data} =await axios.post(`http://localhost:5000/api/rooms`, 
+            await axios.post(`http://localhost:5000/api/rooms`, 
             {
-              headers: axiosAuth(),
-              data: {...values},
+              ...values
             },
            { withCredentials: true }
            )

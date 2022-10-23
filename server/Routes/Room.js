@@ -8,11 +8,12 @@ const router= new express.Router();
 //ROOMS
 
 
-//register
+// create new room
 router.post("/api/rooms", async (req, res) => {
 
-  const room = await new Room(req.body.data);
   try {
+    const room = new Room(req.body);
+    console.log(req.body)
     await room.save();
 
     // const token = await user.generateAuthToken();
@@ -22,7 +23,7 @@ router.post("/api/rooms", async (req, res) => {
     res.status(400).send(e);
   }
 });
-//login
+// join new room
 router.post('/api/rooms/join' ,async (req, res) => {
   try {
    
