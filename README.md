@@ -55,4 +55,11 @@ Aplikacja webowa, na której będzie możliwe rozgrywanie gier w popularne gry l
 
 ## Jak aplikacja wygląda obecnie
 
+1. Logowanie
+
+2. Wybór gry
+
+3. Dołączenie do pokoju / Stworzenie pokoju
+
+4. Po dołączniu do pokoju 
 ![image](https://user-images.githubusercontent.com/73279676/197393763-a6cdb1d7-9efc-4e52-bde1-cd230c7c4820.png)
