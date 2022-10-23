@@ -56,10 +56,16 @@ Aplikacja webowa, na której będzie możliwe rozgrywanie gier w popularne gry l
 ## Jak aplikacja wygląda obecnie
 
 1. Logowanie
+![image](https://user-images.githubusercontent.com/73279676/197394375-ba5c80e2-db13-45b0-95d6-96f4e0e276ce.png)
 
-2. Wybór gry
+
+2. Wybór gry (Menu główne)
+![image](https://user-images.githubusercontent.com/73279676/197394264-34c8b8b0-417c-4d1c-8820-699c3071dd06.png)
+
 
 3. Dołączenie do pokoju / Stworzenie pokoju
+![image](https://user-images.githubusercontent.com/73279676/197394280-0133b99f-f995-44bb-8bf5-212b951dc090.png)
+
 
 4. Po dołączniu do pokoju 
 ![image](https://user-images.githubusercontent.com/73279676/197393763-a6cdb1d7-9efc-4e52-bde1-cd230c7c4820.png)
