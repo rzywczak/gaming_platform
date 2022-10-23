@@ -60,7 +60,7 @@ function MainPage() {
     <div>
       <div className="centered-form">
         <div className="centered-form__box">
-          <h1>Wybierz grę</h1>
+
           {/* {console.log(store.useState('username'))} */}
           {logged === false ? (
             <div>
@@ -73,6 +73,7 @@ function MainPage() {
             </div>
           ) : (
             <div>
+            <h1>Wybierz grę</h1>
               <Link to={{ pathname: "/join-game" }} state={{ gameType: games.ticTacToe}}>
                   <button>{games.ticTacToe[2]}</button>
               </Link>
