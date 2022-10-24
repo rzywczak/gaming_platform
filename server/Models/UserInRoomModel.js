@@ -22,7 +22,7 @@ const UserInRoomSchema = new mongoose.Schema(
         require: true,
         trim: true,
         minlenght: 1,
-        maxlength: 10,
+        maxlength: 255,
       },
   },
   {

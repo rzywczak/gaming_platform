@@ -4,12 +4,14 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import axiosAuth from "../../services/axiosAuth";
 import "./MainPage.scss";
+import JoinGame from "./JoinGame/JoinGame";
 
 function MainPage() {
  
   const navigate = useNavigate();
 
   const [logged, setLogged] = useState(false);
+
   const games = {
 
     'ticTacToe': { 1: 'ticTacToe', 2: 'Kółko i krzyżyk'},
@@ -41,7 +43,7 @@ function MainPage() {
     };
 
     verifyUser();
-  }, []);
+  }, [navigate]);
 
   const logOut = async () => {
     try {
@@ -73,7 +75,14 @@ function MainPage() {
             </div>
           ) : (
             <div>
+            <div className="logout">
+            <h1>Wyloguj się</h1>
+           
+               <button onClick={logOut}>Wyloguj się</button>
+            </div>
+            <JoinGame fromMainPage={true}></JoinGame>
             <h1>Wybierz grę</h1>
+           
               <Link to={{ pathname: "/join-game" }} state={{ gameType: games.ticTacToe}}>
                   <button>{games.ticTacToe[2]}</button>
               </Link>
@@ -89,9 +98,8 @@ function MainPage() {
               <Link to={{ pathname: "/join-game" }} state={{ gameType: games.maze}}>
                 <button>{games.maze[2]}</button>
               </Link>
-              <div>
-               <button onClick={logOut}>Wyloguj się</button>
-            </div>
+           
+   
             </div>
             
           )}

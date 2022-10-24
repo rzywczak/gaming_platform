@@ -2,7 +2,7 @@ import React from 'react'
 import { BrowserRouter, Routes, Route} from "react-router-dom";
 import MainPage from '../components/MainPage/MainPage'
 import JoinGame from '../components/MainPage/JoinGame/JoinGame'
-import CreateGame from '../components/MainPage/CreateGame/CreateGame'
+// import CreateGame from '../components/MainPage/CreateGame/CreateGame'
 import GameRoom from '../components/MainPage/GameRoom/GameRoom'
 import Register from '../components/Register/Register'
 import Login from '../components/Login/Login'
