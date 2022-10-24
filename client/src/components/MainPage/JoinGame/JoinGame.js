@@ -62,7 +62,7 @@ function JoinGame(props) {
       console.log(values);
       try {
         const { data } = await axios.post(
-          `http://localhost:5000/api/rooms/join`,
+          `/api/rooms/join`,
           {
             ...values,
           },

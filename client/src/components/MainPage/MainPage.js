@@ -29,7 +29,7 @@ function MainPage() {
     const verifyUser = async () => {
       if (authResult.Authorization !== null) {
         try {
-           await axios.get(`http://localhost:5000/api/users/:id`, { headers: axiosAuth() });
+           await axios.get(`/api/users/:id`, { headers: axiosAuth() });
           // console.log(data);
           setLogged(true);
         } catch (e) {
@@ -47,7 +47,7 @@ function MainPage() {
 
   const logOut = async () => {
     try {
-     await axios.get(`http://localhost:5000/api/users/logout`, { headers: axiosAuth() });
+     await axios.get(`/api/users/logout`, { headers: axiosAuth() });
       localStorage.removeItem('token')
       localStorage.removeItem('username')
     } catch (e) {

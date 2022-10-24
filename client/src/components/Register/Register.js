@@ -31,7 +31,7 @@ function Register() {
       e.preventDefault();
       try {
         await axios.post(
-         "http://localhost:5000/api/users",
+         "/api/users",
          {
            ...values,
          },
