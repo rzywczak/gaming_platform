@@ -18,10 +18,10 @@ require('dotenv').config();
 mongooseConnection()
 
 const port = process.env.PORT || 5000;
-const publicDirectoryPath = path.join(__dirname, "../client");
+const publicDirectoryPath = path.join(__dirname, "../client/build");
 
 const corsOptions ={
-  origin: ["http://localhost:3000"],
+  origin: '*',
   methods: ["GET", "POST", "DELETE", "PUT", "UPDATE"],
   credentials: true,
 }
