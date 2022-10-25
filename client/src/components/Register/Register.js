@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
-import { createStore } from 'state-pool';
-
+import { toast, ToastContainer} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 
 
@@ -16,16 +15,12 @@ function Register() {
 
   useEffect(() => {
     if (token) {
-      navigate("/");
+      navigate("/game-page");
     }
   }, [token, navigate]);
 
   const [values, setValues] = useState({ username: "", email: "", password: "" });
 
-  const generateError = (error) =>
-    toast.error(error, {
-      position: "bottom-right",
-    });
 
     const registerSubmit = async (e) => {
       e.preventDefault();
@@ -37,12 +32,20 @@ function Register() {
          },
          { withCredentials: true }
        ).then((response) => {
+        // console.log(response)
          localStorage.setItem("token", response.data.token);
          localStorage.setItem('username', response.data.user.username);
        })
-       navigate("/");
-     } catch (e) {
-       console.log(e);
+       navigate("/game-page" , { state: { loggedInfo: 'Pomyślnie Zalogowano'}});
+     } catch(e) {
+      console.log(e)
+      if(e.response.status===400){
+        toast.error('Podana nazwa użytkownika lub email jest już w użyciu!')
+        }
+        else{
+        toast.error(e.message)
+        }
+
      }
     };
 
@@ -82,10 +85,10 @@ function Register() {
           </div>
           <button type="submit">Zarejestruj</button>
           <span>
-            Posiadasz już konto?<Link to={{pathname: '/login'}} >Zaloguj się</Link>
+            Posiadasz już konto? <Link to={{pathname: '/login'}} > Zaloguj się</Link>
           </span>
         </form>
-        <ToastContainer />
+        <ToastContainer  position="bottom-right" theme="colored"/>
       </div>
       </div>
     </>

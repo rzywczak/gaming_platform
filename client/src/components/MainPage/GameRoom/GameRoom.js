@@ -1,4 +1,6 @@
 import React,{ useEffect, useState} from "react";
+import { toast, ToastContainer} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 import "./GameRoom.scss";
 import GameMenu from "./GameMenu/GameMenu";
 import io from "socket.io-client";
@@ -25,7 +27,6 @@ function GameRoom() {
   const [disabled, setDisabled] = useState(false)
   const [howManyConnectedUsers, setHowManyConnectedUsers] = useState(0)
 
-  console.log(gameType)
 const whatGame = () => {
 if(gameType === 'ticTacToe'){
     return { 1: 'ticTacToe', 2: 'Kółko i krzyżyk'}
@@ -46,10 +47,16 @@ if(gameType === 'ticTacToe'){
 
 // paperStoneScissors
 
+const [ isUserButtonHidden ,setIsUserButtonHidden ] = useState(false)
 const [isUserButtonDisabled, setIsUserButtonDisabled] = useState(false)
 const [resultGameOne, setResultGameOne] = useState([])
+const [finishedGame, setFinishedGame] = useState(false)
 
-// 
+// ticTacToe
+
+
+
+//
 const [gameName] = useState(whatGame())
 
  const [data] = useState({username: userName, roomname: roomName})
@@ -98,7 +105,7 @@ const addUser = (user) => {
            navigate("/login");}    
       if(gameType === undefined){
 
-        navigate("/");
+        navigate("/game-page");
       }
     setLoggedIn(true)
     setIsLoading(true)
@@ -117,7 +124,9 @@ const addUser = (user) => {
   
 
   const joinGame = async (e) => {
+    if(e){
     e.preventDefault();
+    }
     if(!disabled){
       setDisabled(true);
     try{
@@ -130,18 +139,16 @@ const addUser = (user) => {
        socket.emit('disconnectUser', data)
        socket.emit('join-game', data, (error) => {
         if(error){
-          console.log(error)
+          
+          // console.log(error)
+          toast.info(error)
+          // e.target.value=(error)
+          setDisabled(false);
         }
  
       })
       socket.on('join-info', (user) => {
-
-  
-      //   if(roomname===roomName){
          addUser(user)
-      //  }
-
-        //  setGameName(roomname)
       })
    
     }
@@ -156,7 +163,7 @@ const addUser = (user) => {
 
   const disconnectUser = async () => {
      socket.emit('disconnectUser', data)
-    navigate("/");
+    navigate("/game-page");
 
   }
   
@@ -167,25 +174,38 @@ const addUser = (user) => {
 
   }
  
-
+// paperStone Scissors
   const paperStoneScissors = async (userChoice) => {
     setIsUserButtonDisabled(true)
-    socket.emit('paperStoneScissors', ({userChoice, userName}))
+    socket.emit('paperStoneScissors', ({userChoice, userName, roomName}))
     socket.on('result', result => {
-
+      setFinishedGame(!finishedGame)
+      setIsUserButtonHidden(true)
       setIsUserButtonDisabled(false)
-
+      socket.emit('disconnectUser', data)
       setResultGameOne(result)
     })
  
-
-
-    // oczekiwanie na innego gracz buttony disable or deleted
     // gdy gracz 2 wybierze w przeciągu ? 10 sekund ? to wysyla dane do servera i sprawdza kto wygrał
-    // ten kto wygrał to dostaje informacje o zwycięstwie 
-
-
   }
+
+const playAgain = async ()  => {
+
+   setIsUserButtonHidden(!isUserButtonHidden)
+
+  // await joinGame()
+   setFinishedGame(!finishedGame)
+
+}
+
+
+
+
+  /// ticTacToe
+
+const ticTacToe = async (userChoice) => {
+  console.log(userChoice)
+}
 
 
   return (
@@ -193,22 +213,24 @@ const addUser = (user) => {
     {isLoading &&
     <div className="game-container">
     <GameMenu disconnectUser={disconnectUser} goToOtherRoom={goToOtherRoom}></GameMenu>
+    <ToastContainer  position="bottom-right" theme="colored"/>
     <div className="position-game-area">
     <div className="game-container__room-info">
       <div className="game-container__room-info--users">
       {howManyConnectedUsers >= 1 && <label><h1>Typ Gry:</h1><h2>{gameName[2]}</h2><h1>Pokój:</h1><h2>{roomName}</h2><h1>Gracze:</h1><h2>{users.map(user => <div key={user}>{user}</div>)}</h2></label>}
       </div>
     </div>
+  
       <div className="game-container__board">
           {howManyConnectedUsers === 0 && <button className="game-container__board--join-button" onClick={(e) => joinGame(e)} disabled={disabled}>Join Game</button>}
-          {howManyConnectedUsers === 1 && <div className="game-container__board--waiting"><div className="game-container__board--waiting-info">Waiting for opponent...</div></div>}
-          {howManyConnectedUsers === 2 && 
+          {(howManyConnectedUsers === 1 && !finishedGame) && <div className="game-container__board--waiting"><div className="game-container__board--waiting-info">Waiting for opponent...</div></div>}
+          {(howManyConnectedUsers === 2 || finishedGame) && 
           
           <div className="game-container__board--started-game">
           
            {gameName[1] === 'findAPair' && <FindAPair gameType={gameName[1]}></FindAPair> }
-           {gameName[1] === 'maze' && <Maze gameType={gameName[1]}>{console.log('test')}</Maze> }
-           {gameName[1] ==='paperStoneScissors'&& <PaperStoneScissors paperStoneScissors={paperStoneScissors} gameType={gameName[1]} disabled={isUserButtonDisabled} resultGame={resultGameOne}></PaperStoneScissors> }
+           {gameName[1] === 'maze' && <Maze gameType={gameName[1]}></Maze> }
+           {gameName[1] ==='paperStoneScissors'&& <PaperStoneScissors paperStoneScissors={paperStoneScissors} gameType={gameName[1]} disabled={isUserButtonDisabled} resultGame={resultGameOne} isUserButtonHidden={isUserButtonHidden} playAgain={playAgain}></PaperStoneScissors> }
            {gameName[1] ==='puns' && <Puns gameType={gameName[1]}></Puns> }
            {gameName[1] ==='ticTacToe' && <TicTacToe gameType={gameName[1]}></TicTacToe> }
 
@@ -220,7 +242,9 @@ const addUser = (user) => {
           
       </div>
       </div>
+
       </div>
+      
     }
     </div>
   );

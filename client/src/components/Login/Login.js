@@ -10,17 +10,11 @@ function Login() {
   const navigate = useNavigate();
   useEffect(() => {
     if (token) {
-      navigate("/");
+      navigate("/game-page");
     }
   }, [token, navigate]);
 
   const [values, setValues] = useState({ email: "", password: "" });
-
-  const generateError = (error) =>
-    toast.error(error, {
-      position: "bottom-right",
-    });
-
 
   const loginSubmit = async (e) => {
     e.preventDefault();
@@ -35,9 +29,14 @@ function Login() {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem('username', response.data.user.username);
       })
-      navigate("/");
+      navigate("/game-page" , { state: { loggedInfo: 'Pomyślnie Zalogowano'}});
     } catch (e) {
-      // console.log(e);
+      if(e.response.status===400){
+      toast.error('Nieprawidłowy login lub hasło!')
+      }
+      else{
+      toast.error(e.message)
+      }
     }
   }
 
@@ -69,10 +68,10 @@ function Login() {
       </div>
       <button type="submit">Zaloguj się</button>
       <span>
-        Nie masz konta?<Link to={{pathname: '/register'}} >Zarejestruj się</Link>
+        Nie masz konta? <Link to={{pathname: '/register'}}> Zarejestruj się</Link>
       </span>
     </form>
-    <ToastContainer />
+    <ToastContainer  position="bottom-right" theme="colored"/>
   </div>
   </div>
   )

@@ -1,5 +1,7 @@
 const { Server } = require("socket.io")
 const UserInRoom = require("../Models/UserInRoomModel")
+const PaperStoneScissors = require("../Models/PaperStoneScissorsModel")
+const { emit } = require("../Models/UserInRoomModel")
 
 const socketRouter = (httpServer) => {
     const io = new Server(httpServer)
@@ -30,7 +32,8 @@ io.on("connection", (socket) => {
         const usersInRoom = await UserInRoom.countUsersInRoom(roomname)
         if(usersInRoom>=2){
           // console.log('To many users maximum number of users is 2')
-          return callback('To many users maximum number of users is 2')
+          // return callback('To many users in room, maximum number of users is 2')
+          return callback('Za dużo użytkowników w pokoju spróbuj ponownie później!')
         }
 
         const userInRoom =  await new UserInRoom({socketID: socket.id, userName: username, roomName: roomname})
@@ -74,52 +77,62 @@ io.on("connection", (socket) => {
       
 
     })
-    socket.on('paperStoneScissors', (data) =>{
+    socket.on('paperStoneScissors', async (data) =>{
  
-       usersChoices.push({
-        picked: data.userChoice,
-        name: data.userName
-       })
+      const userPick = await new PaperStoneScissors({userChoice: data.userChoice, userName: data.userName, roomName: data.roomName})
+      await userPick.save();
 
-       if(usersChoices.length <= 1){}
+
+
+      const howManyUsersPick = await PaperStoneScissors.howManyUsersPick(data.roomName)
+
+      console.log(howManyUsersPick.length)
+
+      //  usersChoices.push({
+      //   picked: data.userChoice,
+      //   name: data.userName
+      //  })
+
+       if(howManyUsersPick.length <= 1){}
        
        else{
 
-        const playerOne = usersChoices[0]
-        const playerTwo = usersChoices[1] 
+        const playerOne = howManyUsersPick[0]
+        const playerTwo = howManyUsersPick[1]
         let win = "";
         let message = "";
 
-        console.log(playerOne.picked)
-        if(playerOne.picked === 'bato') {
-          if(playerOne.picked === 'bato' && playerTwo.picked === 'gunting') {
-              message = `Gracz ${playerOne.name} wygrał!`;
-              win = playerOne.name;
-          } else if(playerOne.picked === playerTwo.picked) {
+        console.log(playerOne.userChoice)
+        console.log(playerTwo.userChoice)
+        if(playerOne.userChoice === 'bato') {
+          if(playerOne.userChoice === 'bato' && playerTwo.userChoice === 'gunting') {
+              message = `Gracz ${playerOne.userName} wygrał!`;
+              win = playerOne.userName;
+          } else if(playerOne.userChoice === playerTwo.userChoice) {
               message = `Remis!`;
           } else {
-              message = `Gracz ${playerTwo.name} wygrał!`;
-              win = playerTwo.name;
+              message = `Gracz ${playerTwo.userName} wygrał!`;
+              win = playerTwo.userName;
           }
-      } else if(playerOne.picked === 'gunting') {
-          if(playerOne.picked === 'gunting' && playerTwo.picked === 'papel') {
-              message = `Gracz ${playerOne.name} wygrał!`;
-              win = playerOne.name;
-          } else if(playerOne.picked === playerTwo.picked) {
+      } else if(playerOne.userChoice === 'gunting') {
+          if(playerOne.userChoice === 'gunting' && playerTwo.userChoice === 'papel') {
+              message = `Gracz ${playerOne.userName} wygrał!`;
+              win = playerOne.userName;
+          } else if(playerOne.userChoice === playerTwo.userChoice) {
               message = `Remis!`;
           } else {
-              message = `Gracz ${playerTwo.name} wygrał!`;
-              win = playerTwo.name;
+              message = `Gracz ${playerTwo.userName} wygrał!`;
+              win = playerTwo.userName;
           }
-      } else if(playerOne.picked === 'papel') {
-          if(playerOne.picked === 'papel' && playerTwo.picked === 'bato') {
-              message = `Gracz ${playerOne.name} wygrał!`;
-              win = playerOne.name;
-          } else if(playerOne.picked === playerTwo.picked) {
+      } else if(playerOne.userChoice === 'papel') {
+          if(playerOne.userChoice === 'papel' && playerTwo.userChoice === 'bato') {
+              message = `Gracz ${playerOne.userName} wygrał!`;
+              win = playerOne.userName;
+          } else if(playerOne.userChoice === playerTwo.userChoice) {
               message = `Remis!`;
           } else {
-              message = `Gracz ${playerTwo.name} wygrał!`;
-              win = playerTwo.name;
+              message = `Gracz ${playerTwo.userName} wygrał!`;
+              win = playerTwo.userName;
           }
       }
 
@@ -131,18 +144,28 @@ io.on("connection", (socket) => {
 
       let result = {
         message,
-        usersChoices,
         win,
       }
 
 
-      io.emit('result', result);
+      io.to(data.roomName).emit('result', result);
       console.log(result)
-      usersChoices = [];
+      await PaperStoneScissors.deleteMany({roomName :data.roomName});
        }
 
 
     })
+
+  
+
+
+    // TicTacToe
+    socket.on('ticTacToe', async (data) =>{
+      console.log(data)
+
+      // io.to(data.roomName).emit('',)
+    })
+
 
 
     socket.on("disconnect", async () => {

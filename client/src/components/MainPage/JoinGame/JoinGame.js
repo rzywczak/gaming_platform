@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "./JoinGame.scss";
+import { toast, ToastContainer} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 import { useLocation, useNavigate, useParamsm, Link } from "react-router-dom";
 import CreateGame from "../CreateGame/CreateGame";
 import axiosAuth from "../../../services/axiosAuth";
 import axios from "axios";
-import io from "socket.io-client";
 
 // const socket = io();
 
@@ -33,7 +34,7 @@ function JoinGame(props) {
       // console.log(gameType.gameType[1])
       if (gameType === undefined) {
         // console.log('gra jest undefinded')
-        navigate("/");
+        navigate("/game-page");
         return;
       }
     } catch (error) {
@@ -74,7 +75,12 @@ function JoinGame(props) {
         //  console.log('joined Game')
         console.log(data);
       } catch (e) {
-        console.log(e);
+        if(e.response.status===400){
+          toast.error('Nieprawidłowa nazwa pokoju lub hasło')
+          }
+          else{
+          toast.error(e.message)
+          }
       }
     }
   };
@@ -143,7 +149,7 @@ function JoinGame(props) {
               <div className="create-room">
                 <CreateGame gameType={gameType} username={username} />
               </div>
-
+              <ToastContainer  position="bottom-right" theme="colored"/>
               <div>{/* <button onClick={logOutFunction}>logOut</button> */}</div>
             </div>
             </div>

@@ -1,16 +1,31 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast, ToastContainer} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 import axiosAuth from "../../services/axiosAuth";
 import "./MainPage.scss";
 import JoinGame from "./JoinGame/JoinGame";
+import Logo from "../../img/logo.png"
 
 function MainPage() {
  
   const navigate = useNavigate();
+  // const { state } = useLocation() 
 
+  // if(state.loggedInfo!==null){
+  //   const loggedInfo = state.loggedInfo
+    // const [loggedInfoUser, setLoggedInfoUser] = useState(() => {if(state!==null)
+    //   {
+    //     console.log(state.loggedInfo)
+    //     return(state.loggedInfo)}
+    //   else{return(null)}})
+  // }
+
+ 
   const [logged, setLogged] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [userName, setUserName] = useState('');
 
   const games = {
 
@@ -29,9 +44,15 @@ function MainPage() {
     const verifyUser = async () => {
       if (authResult.Authorization !== null) {
         try {
-           await axios.get(`/api/users/:id`, { headers: axiosAuth() });
-          // console.log(data);
+           const {data} =await axios.get(`/api/users/:id`, { headers: axiosAuth() });
+          setUserName(data.username)
           setLogged(true);
+          setIsLoading(true)
+          // if(loggedInfoUser!==undefined&&loggedInfoUser!==null){
+          // toast.success(loggedInfoUser)
+          // setLoggedInfoUser(null)
+          // useLocation.setState(null)
+          // }
         } catch (e) {
           console.log(e);
         }
@@ -56,16 +77,25 @@ function MainPage() {
 
     setLogged(false);
     navigate("/login");
+    // setLoggedInfoUser(true)
   };
 
   return (
     <div>
-      <div className="centered-form">
-        <div className="centered-form__box">
+    {isLoading && 
+    <div>
+    <div> 
+    
+    </div>
+    <div>
+    <div> 
+    
+      {/* <div className="centered-form">
+        <div className="centered-form__box"> */}
 
-          {/* {console.log(store.useState('username'))} */}
           {logged === false ? (
-            <div>
+              <div className="centered-form">
+              <div className="centered-form__box">
               <Link to={{ pathname: "/register" }}>
                 <button>Rejestracja</button>
               </Link>
@@ -73,14 +103,24 @@ function MainPage() {
                 <button>Logowanie</button>
               </Link>
             </div>
+            </div>
+            
           ) : (
             <div>
-            <div className="logout">
-            <h1>Wyloguj się</h1>
-           
-               <button onClick={logOut}>Wyloguj się</button>
+            <div className="nav">
+            <Link to={{ pathname: "/" }}>
+              <img className="header__logo" src={Logo} alt="Platforma Rozrywkowa"></img>
+           </Link>
+            <div className="logout-info">
+            <div>Użytkownik {userName}</div>
+            <button onClick={logOut}>Wyloguj się</button>
             </div>
-            <JoinGame fromMainPage={true}></JoinGame>
+            </div>
+            <div className="centered-form">
+              <div className="centered-form__box">
+            <JoinGame fromMainPage={true} />
+            </div>
+            <div className="centered-form__box">
             <h1>Wybierz grę</h1>
            
               <Link to={{ pathname: "/join-game" }} state={{ gameType: games.ticTacToe}}>
@@ -99,15 +139,19 @@ function MainPage() {
                 <button>{games.maze[2]}</button>
               </Link>
            
-   
+              <ToastContainer  position="bottom-right" theme="colored"/>
+              </div>
             </div>
-            
+            </div>
+          
           )}
         </div>
       
       </div>
-
+      </div>
+    }
       {/* wyświetlanie dostępnnych pokoji */}
+      
     </div>
   );
 }

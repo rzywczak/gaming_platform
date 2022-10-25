@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { toast, ToastContainer} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 import axiosAuth from "../../../services/axiosAuth"
 import axios from 'axios'
 import { useLocation, Link, useNavigate } from "react-router-dom";
@@ -31,9 +33,7 @@ useEffect(() => {
 
     const authResult = axiosAuth();
 
-
       if (authResult.Authorization !== null) {
-        console.log(values)
         try {
             await axios.post(`http://localhost:5000/api/rooms`, 
             {
@@ -41,10 +41,21 @@ useEffect(() => {
             },
            { withCredentials: true }
            )
-          
+           e.target[0].value='';
+           e.target[1].value='';
+  
+          toast.success('Pomyślnie stworzono pokój!')
+          console.log(values)
+
           // console.log(data);
           }catch (e) {
           console.log(e);
+          if(e.response.status===400){
+            toast.error('Ta nazwa pokoju jest już w użyciu!')
+            }
+            else{
+            toast.error(e.message)
+            }
         }
       }
 
@@ -74,8 +85,9 @@ useEffect(() => {
               ></input>
               <button>Stwórz</button>
             </form>
-      
+            <ToastContainer  position="bottom-right" theme="colored"/>
         </div>
+        
       </div>
 
    
