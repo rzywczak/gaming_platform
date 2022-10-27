@@ -78,10 +78,10 @@ io.on("connection", (socket) => {
 
     })
     socket.on('paperStoneScissors', async (data) =>{
- 
-      const userPick = await new PaperStoneScissors({userChoice: data.userChoice, userName: data.userName, roomName: data.roomName})
+      const { userChoice, userName, roomName} = await data
+      const userPick = await new PaperStoneScissors({userChoice: userChoice, userName: userName, roomName: roomName})
       await userPick.save();
-
+      
 
 
       const howManyUsersPick = await PaperStoneScissors.howManyUsersPick(data.roomName)

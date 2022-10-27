@@ -1,3 +1,5 @@
+@use "../../../Colors/Colors.scss";
+
 .footer{
     
     display: flex;
@@ -5,7 +7,7 @@
     justify-content: center;
     height: 25vh;
     width: 100%;
-    background-color: #023047;
+    background-color: Colors.$purple;
     color: white
 
 }

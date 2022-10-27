@@ -6,7 +6,7 @@ import { useLocation, useNavigate, useParamsm, Link } from "react-router-dom";
 import CreateGame from "../CreateGame/CreateGame";
 import axiosAuth from "../../../services/axiosAuth";
 import axios from "axios";
-
+import Header from "../HomePage/Header/Header"
 // const socket = io();
 
 function JoinGame(props) {
@@ -16,6 +16,9 @@ function JoinGame(props) {
   const [isLoading, setIsLoading] = useState(false);
   const { gameType } = location.state || "wronga data";
   const [fromMainPage, setFromMainPage ] = useState(props.fromMainPage);
+  const [ createRoomButton, setCreateRoomButton ] = useState(true);
+  const [ isDisabledCreateRoomButton, setIsDisabledCreateRoomButton ] = useState(true);
+  // const [ isActiveButton, setIsActiveButton ] = useState(true);
 
   useEffect(() => {
     // console.log(user, room)
@@ -34,7 +37,7 @@ function JoinGame(props) {
       // console.log(gameType.gameType[1])
       if (gameType === undefined) {
         // console.log('gra jest undefinded')
-        navigate("/game-page");
+        navigate("/");
         return;
       }
     } catch (error) {
@@ -85,17 +88,34 @@ function JoinGame(props) {
     }
   };
 
+  const logout = async () => {
+    try {
+      await axios.get(`/api/users/logout`, { headers: axiosAuth() });
+      localStorage.removeItem("token");
+      localStorage.removeItem("username");
+    } catch (e) {
+      console.log(e);
+    }
+    navigate("/");
+
+  };
+
+  const optionSwitch = async (e) => {
+    setIsDisabledCreateRoomButton(!isDisabledCreateRoomButton)
+    setCreateRoomButton(!createRoomButton)
+  }
+
   return (
     <>
       {isLoading && (
         <div>
           {fromMainPage===true ? (
 
-            <div className="">
-              <div className="">
+           
+              <div>
               <h1>Dołącz do pokoju</h1>
                 <form onSubmit={(e) => joingameSubmit(e)}>
-                  <label> {username} </label>
+                  <label> Nazwa pokoju</label>
                   <input
                     type="text"
                     name="roomName"
@@ -116,17 +136,35 @@ function JoinGame(props) {
                   <button>Dołącz</button>
                 </form>
               </div>
-            </div>
+          
  
           ) : (
-            <div className="centered-form">
-            <div className="centered-form__box">
+            <div className="join-content"> 
+            <Header logged={true} logout={logout} userName={username}></Header>
 
-              <div className="rooms">
-                <h2>{gameType[2]}</h2>
-                <form onSubmit={(e) => joingameSubmit(e)}>
-                  <label> {username} </label>
+
+        
+            <div className="join-content">
+           
+        
+            {!createRoomButton ?
+              <div className="join-content__join">
+           
+           
+                <form className="join-content__join--form" onSubmit={(e) => joingameSubmit(e)}>
+                <h2> <div className="join-content__back">
+            <Link className="join-content__back--button" to={{ pathname: "/" }}>
+              Powrót
+            </Link>
+          </div>{gameType[2]}</h2>
+            <div className="join-content__options">
+            <button className={`join-content__options--button ${isDisabledCreateRoomButton}`} onClick={(e) => optionSwitch(e)} disabled={isDisabledCreateRoomButton}>Stwórz pokój</button>
+            <button className={`join-content__options--button ${!isDisabledCreateRoomButton}`} onClick={(e) => optionSwitch(e)} disabled={!isDisabledCreateRoomButton}>Dołącz do pokoju</button>
+          
+            </div>
+                <label> Nazwa pokoju</label>
                   <input
+                   className="join-content__join--input" 
                     type="text"
                     name="roomName"
                     placeholder="Podaj nazwe pokoju"
@@ -136,6 +174,7 @@ function JoinGame(props) {
                   ></input>
                   <label>Hasło</label>
                   <input
+                   className="join-content__join--input" 
                     type="password"
                     name="password"
                     placeholder="Podaj hasło"
@@ -143,15 +182,16 @@ function JoinGame(props) {
                     autoComplete="off"
                     onChange={(e) => setValues({ ...values, [e.target.name]: e.target.value })}
                   ></input>
-                  <button>Dołącz</button>
+                  <button  className="join-content__join--submit" >Dołącz</button>
                 </form>
+              
               </div>
-              <div className="create-room">
-                <CreateGame gameType={gameType} username={username} />
-              </div>
-              <ToastContainer  position="bottom-right" theme="colored"/>
-              <div>{/* <button onClick={logOutFunction}>logOut</button> */}</div>
+              : (
+                <CreateGame  gameType={gameType} username={username} isDisabledCreateRoomButton={isDisabledCreateRoomButton} optionSwitch={optionSwitch} />
+              )
+            }
             </div>
+            <ToastContainer position="bottom-right" theme="colored"/>
             </div>
           )}
         </div>

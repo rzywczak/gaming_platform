@@ -1,0 +1,78 @@
+@use "../../../Colors/Colors.scss";
+
+.header {
+  height: 12vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  padding: 0.5rem 0rem;
+  background: Colors.$purple;
+  font-weight: 600;
+
+  color: Colors.$black;
+  &__logo {
+    margin: 0 0 0 20px;
+    border-radius: 50px;
+    height: 8vh;
+  }
+  &__navbar {
+    &--ul {
+      display: flex;
+      list-style: none;
+      color: Colors.$white;
+    }
+    &--li {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 20px;
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+      a:hover {
+        color: Colors.$light_white;
+      }
+    }
+
+    &--logout {
+      height: 12vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin-right: 20px;
+      // margin-top: 15px;
+      color: Colors.$white;
+
+      &-button {
+        background: Colors.$light_purple;
+        padding: 12px;
+        cursor: pointer;
+        border: none;
+        color: Colors.$white;
+        font-size: 16px;
+        transition: background 0.3s ease;
+        border-radius: 25px;
+        margin-top: 8px;
+      }
+      &-button:hover {
+        background: Colors.$dark_purple;
+      }
+    }
+
+    .start-play {
+      padding: 10px 20px;
+      background: Colors.$yellow;
+      border-radius: 15px;
+      color: Colors.$black;
+      transition: background 0.3s ease;
+    }
+    .start-play:hover {
+      background: Colors.$yellow_light;
+      color: Colors.$black;
+    }
+  }
+}

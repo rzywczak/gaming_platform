@@ -1,0 +1,61 @@
+// $bg-img: url("../../../../img/two.png");
+@use "../../../Colors/Colors.scss";
+
+.main-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 80vh;
+  width: 100%;
+  background: Colors.$light_purple;
+  color: Colors.$white;
+
+  &__game-panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 20vw;
+    min-width: 250px;
+    height: 50vh;
+
+    &--game-type {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      width: 100%;
+      padding: 12px;
+      margin-top: 5px;
+      background: Colors.$dark_purple;
+      border: none;
+      color: Colors.$white;
+      text-decoration: none;
+      font-weight: 600;
+  
+    }
+    &--game-type:hover {
+      background: Colors.$purple;
+    }
+  }
+
+  &__title {
+    font-size: 72px;
+    margin-bottom: 20px;
+  }
+  .start-play {
+    padding: 10px 20px;
+    background: Colors.$yellow;
+    border-radius: 15px;
+    color: Colors.$black;
+    transition: background 0.3s ease;
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+  }
+  .start-play:hover {
+    background: Colors.$yellow_light;
+    color: Colors.$black;
+  }
+}

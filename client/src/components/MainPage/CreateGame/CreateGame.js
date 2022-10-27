@@ -23,6 +23,11 @@ useEffect(() => {
   if (authResult.Authorization === null) {
     navigate("/");
   }
+  if (gameType === undefined) {
+    // console.log('gra jest undefinded')
+    navigate("/");
+    return;
+  }
 
 }
 , [navigate]);
@@ -63,30 +68,40 @@ useEffect(() => {
 
 
   return (
-    <div>
+    <div className="join-content__create-game">
     {/* {!createGameType ? checkIfNoSelectedGame() */}
     
-        <div>
-          <h2>{gameType[2]}</h2>
+
+          {/* <h2>{gameType[2]}</h2> */}
         
-            <form onSubmit={(e) => createGame(e)}>
-              <label>{username}</label>
+            <form className="join-content__create-game--form" onSubmit={(e) => createGame(e)}>
+      
+                <h2> <div className="join-content__back">
+            <Link className="join-content__back--button" to={{ pathname: "/" }}>
+              Powrót
+            </Link>
+          </div>{gameType[2]}</h2>
+            <div className="join-content__options">
+            <button className={`join-content__options--button ${props.isDisabledCreateRoomButton}`} onClick={(e) => props.optionSwitch(e)} disabled={props.isDisabledCreateRoomButton}>Stwórz pokój</button>
+            <button className={`join-content__options--button ${!props.isDisabledCreateRoomButton}`} onClick={(e) => props.optionSwitch(e)} disabled={!props.isDisabledCreateRoomButton}>Dołącz do pokoju</button>
+            </div>
+
               <label>Nazwa pokoju</label>
-              <input type="text" name="roomName" placeholder="Podaj nazwe pokoju" required autoComplete="off"
+              <input className="join-content__create-game--input"  type="text" name="roomName" placeholder="Podaj nazwe pokoju" required autoComplete="off"
                 onChange={(e) => setValues({ ...values, [e.target.name]: e.target.value })}
-              ></input>
+              ></input> 
               <label>Hasło</label>
-              <input type="password" name="password" placeholder="Podaj hasło" required autoComplete="off"
+              <input className="join-content__create-game--input"  type="password" name="password" placeholder="Podaj hasło" required autoComplete="off"
                 onChange={(e) => setValues({ ...values, [e.target.name]: e.target.value })}
 
                 ></input>
               <label>Typ gry:</label>
-              <input type="text" name="gameType" placeholder={gameType[2]} required disabled
+              <input  className="join-content__create-game--input"  type="text" name="gameType" placeholder={gameType[2]} required disabled
               ></input>
-              <button>Stwórz</button>
+              <button className="join-content__create-game--submit" >Stwórz</button>
             </form>
             <ToastContainer  position="bottom-right" theme="colored"/>
-        </div>
+       
         
       </div>
 
