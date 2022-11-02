@@ -3,12 +3,17 @@
   background-color: #403061;
 
   &__room-info {
-
-    align-items: center;
+    display: flex;
+    // align-items: center;
     justify-content: center;
     color: white;
+    width: 20vw;
     // padding-left: 10px;
+
+  &--user{
+    margin: 15px;
   }
+}
 
   &__board {
     display: flex;
@@ -44,13 +49,14 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 500px;
+        width: 80%;
         height: 500px;
         background-color: grey;
         color: white;
      
 
         &-info{
+           
             font-size: 2rem;
         }
     }
@@ -62,7 +68,7 @@
         flex-direction: row;
         justify-content:center;
         align-items: center;
-        width: 500px;
+        width: 80%;
         height: 500px;
         color: white;
         background-color: #2d3962;
@@ -70,11 +76,24 @@
         // .tictactoe-items{}
         .tictactoe-item{
           
-            margin: 0 0.2rem;
+            // margin: 0 0.2rem;
 
         }
     }
 
+    &--info{
+      // display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+      margin-bottom: 15px;
+      width: 80%;
+
+
+      h2{
+        margin: 8px 0;
+      }
+    }
   }
 }
 

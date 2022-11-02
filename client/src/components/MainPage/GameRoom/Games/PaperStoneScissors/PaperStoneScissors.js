@@ -17,13 +17,13 @@ function PaperStoneScissors(props) {
 
       {props.isUserButtonHidden ? 
       
-          <button onClick={() => props.playAgain()}>Zagraj ponownie  {console.log(props.isUserButtonHidden)} </button>
+          <button onClick={() => props.playAgain()}>Zagraj ponownie</button>
       :
 
         <div>
-            <button className="tictactoe-item" onClick={() => props.paperStoneScissors('bato')} disabled={props.disabled}>Kamień</button>
-            <button className="tictactoe-item" onClick={() => props.paperStoneScissors('papel')} disabled={props.disabled} >Papier</button>
-            <button className="tictactoe-item" onClick={() => props.paperStoneScissors('gunting')} disabled={props.disabled}>Nożyce</button> 
+            <button className="paperstonescissors-item" onClick={() => props.paperStoneScissors('bato')} disabled={props.disabled}>Kamień</button>
+            <button className="paperstonescissors-item" onClick={() => props.paperStoneScissors('papel')} disabled={props.disabled} >Papier</button>
+            <button className="paperstonescissors-item" onClick={() => props.paperStoneScissors('gunting')} disabled={props.disabled}>Nożyce</button> 
         </div>
       }
           

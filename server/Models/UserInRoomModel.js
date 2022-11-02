@@ -49,10 +49,18 @@ const UserInRoomSchema = new mongoose.Schema(
 // join to game  // serach User in Room
 UserInRoomSchema.statics.findByCredentials = async (user, room) => {
 
-    const userInRoom = await UserInRoom.findOne({ userName: user,roomName: room})
+    const userInRoom = await UserInRoom.findOne({ userName: user, roomName: room})
 
     return userInRoom
 }
+
+UserInRoomSchema.statics.findAllRoomsWithUser= async (user) => {
+
+  const userInRoom = await UserInRoom.find({ userName: user})
+
+  return userInRoom
+}
+
 UserInRoomSchema.statics.countUsersInRoom = async (room) => {
 
 const usersInRoom = await UserInRoom.count({roomName: room})

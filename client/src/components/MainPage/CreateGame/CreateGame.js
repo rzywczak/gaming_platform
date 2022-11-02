@@ -73,10 +73,7 @@ useEffect(() => {
     
 
           {/* <h2>{gameType[2]}</h2> */}
-        
-            <form className="join-content__create-game--form" onSubmit={(e) => createGame(e)}>
-      
-                <h2> <div className="join-content__back">
+                       <h2> <div className="join-content__back">
             <Link className="join-content__back--button" to={{ pathname: "/" }}>
               Powrót
             </Link>
@@ -85,6 +82,10 @@ useEffect(() => {
             <button className={`join-content__options--button ${props.isDisabledCreateRoomButton}`} onClick={(e) => props.optionSwitch(e)} disabled={props.isDisabledCreateRoomButton}>Stwórz pokój</button>
             <button className={`join-content__options--button ${!props.isDisabledCreateRoomButton}`} onClick={(e) => props.optionSwitch(e)} disabled={!props.isDisabledCreateRoomButton}>Dołącz do pokoju</button>
             </div>
+
+            <form className="join-content__create-game--form" onSubmit={(e) => createGame(e)}>
+      
+ 
 
               <label>Nazwa pokoju</label>
               <input className="join-content__create-game--input"  type="text" name="roomName" placeholder="Podaj nazwe pokoju" required autoComplete="off"
@@ -98,7 +99,7 @@ useEffect(() => {
               <label>Typ gry:</label>
               <input  className="join-content__create-game--input"  type="text" name="gameType" placeholder={gameType[2]} required disabled
               ></input>
-              <button className="join-content__create-game--submit" >Stwórz</button>
+              <input type="submit" value="Stwórz" className="join-content__create-game--submit" ></input>
             </form>
             <ToastContainer  position="bottom-right" theme="colored"/>
        

@@ -21,7 +21,7 @@ function JoinGame(props) {
   // const [ isActiveButton, setIsActiveButton ] = useState(true);
 
   useEffect(() => {
-    // console.log(user, room)
+
     
     if(fromMainPage){
       setIsLoading(true);
@@ -58,12 +58,12 @@ function JoinGame(props) {
 
   const joingameSubmit = async (e) => {
     e.preventDefault();
-
+ 
     const username = localStorage.getItem("username");
     const authResult = axiosAuth();
 
     if (authResult.Authorization !== null) {
-      console.log(values);
+      // console.log(values);
       try {
         const { data } = await axios.post(
           `/api/rooms/join`,
@@ -76,7 +76,7 @@ function JoinGame(props) {
           state: { userName: username, roomName: data.room.roomName, gameType: data.room.gameType },
         });
         //  console.log('joined Game')
-        console.log(data);
+        // console.log(data);
       } catch (e) {
         if(e.response.status===400){
           toast.error('Nieprawidłowa nazwa pokoju lub hasło')
@@ -101,8 +101,10 @@ function JoinGame(props) {
   };
 
   const optionSwitch = async (e) => {
+    // if(isDisabledCreateRoomButton===false){
     setIsDisabledCreateRoomButton(!isDisabledCreateRoomButton)
     setCreateRoomButton(!createRoomButton)
+    // }
   }
 
   return (
@@ -149,19 +151,19 @@ function JoinGame(props) {
         
             {!createRoomButton ?
               <div className="join-content__join">
-           
-           
-                <form className="join-content__join--form" onSubmit={(e) => joingameSubmit(e)}>
-                <h2> <div className="join-content__back">
+              <h2> <div className="join-content__back">
             <Link className="join-content__back--button" to={{ pathname: "/" }}>
               Powrót
             </Link>
           </div>{gameType[2]}</h2>
-            <div className="join-content__options">
+              <div className="join-content__options">
             <button className={`join-content__options--button ${isDisabledCreateRoomButton}`} onClick={(e) => optionSwitch(e)} disabled={isDisabledCreateRoomButton}>Stwórz pokój</button>
             <button className={`join-content__options--button ${!isDisabledCreateRoomButton}`} onClick={(e) => optionSwitch(e)} disabled={!isDisabledCreateRoomButton}>Dołącz do pokoju</button>
           
             </div>
+                <form className="join-content__join--form" onSubmit={(e) => joingameSubmit(e)}>
+
+           
                 <label> Nazwa pokoju</label>
                   <input
                    className="join-content__join--input" 
@@ -182,7 +184,7 @@ function JoinGame(props) {
                     autoComplete="off"
                     onChange={(e) => setValues({ ...values, [e.target.name]: e.target.value })}
                   ></input>
-                  <button  className="join-content__join--submit" >Dołącz</button>
+                  <input type="submit" value="Dołącz" className="join-content__join--submit" ></input>
                 </form>
               
               </div>

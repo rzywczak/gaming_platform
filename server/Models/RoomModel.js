@@ -69,7 +69,7 @@ roomSchema.statics.findByCredentials = async (roomName, password) => {
 
 
 roomSchema.pre('save',async function(next) {
-  console.log('test')
+  // console.log('test')
   if(this.isModified('password')){
    this.password = await bcrypt.hash(this.password, 8)
   }
