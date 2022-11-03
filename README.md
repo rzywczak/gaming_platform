@@ -57,24 +57,44 @@ Aplikacja webowa, na której będzie możliwe rozgrywanie gier w popularne gry l
 
 0. Dostępna pod linkiem: https://platforma-rozrywkowa.herokuapp.com/
 
-1. Logowanie
-![image](https://user-images.githubusercontent.com/73279676/197394375-ba5c80e2-db13-45b0-95d6-96f4e0e276ce.png)
+1. Strona główna
 
+![image](https://user-images.githubusercontent.com/73279676/199819809-2ce054d9-5cd9-4850-bcd4-093856255376.png)
 
 2. Wybór gry (Menu główne)
-![image](https://user-images.githubusercontent.com/73279676/197394264-34c8b8b0-417c-4d1c-8820-699c3071dd06.png)
 
+![image](https://user-images.githubusercontent.com/73279676/199819762-401a1459-be2f-4fdb-b18e-a4bd5df32334.png)
 
-3. Dołączenie do pokoju / Stworzenie pokoju
-![image](https://user-images.githubusercontent.com/73279676/197394280-0133b99f-f995-44bb-8bf5-212b951dc090.png)
+3. Logowanie / Rejestracja 
 
+![image](https://user-images.githubusercontent.com/73279676/199819939-95d397fd-4d04-4917-9ec7-3b1db748f97b.png)
 
-4. Po dołączniu do pokoju 
-![image](https://user-images.githubusercontent.com/73279676/197393763-a6cdb1d7-9efc-4e52-bde1-cd230c7c4820.png)
+![image](https://user-images.githubusercontent.com/73279676/199819976-925fcaf3-94c1-4765-b258-c582179d16d2.png)
 
-5. Po dołączeniu jednego z graczy 
-![image](https://user-images.githubusercontent.com/73279676/197405487-f9f5416c-99b7-47e6-9866-a19e8aca3a1a.png)
+4. Po wybraniu kategori gry
 
-6. po dołączeniu dwóch graczy 
-![image](https://user-images.githubusercontent.com/73279676/197405832-a6bcf4c0-07ba-488b-a525-8de947f11031.png)
+![image](https://user-images.githubusercontent.com/73279676/199820100-1e46ae8c-9e9c-4bff-9137-98d416724d45.png)
 
+![image](https://user-images.githubusercontent.com/73279676/199820128-37689cdb-d335-4376-b82e-2a79f25b20ea.png)
+
+5. Po dołączeniu do pokoju
+
+![image](https://user-images.githubusercontent.com/73279676/199820223-0543b383-81b6-4ad9-9a91-7bdbe37c3469.png)
+
+6. Po dołączeniu do gry jednego gracza  ( dla gry znajdź parę )
+
+![image](https://user-images.githubusercontent.com/73279676/199820389-9bb63bb8-0f80-40b5-a427-61ed0aa17a78.png)
+
+7. Po dołączeniu dwóch graczy ( dla gry znajdź parę )
+
+![image](https://user-images.githubusercontent.com/73279676/199820521-dcf526f1-08c5-4e0a-8797-de65fa0cdcc0.png)
+
+![image](https://user-images.githubusercontent.com/73279676/199820562-6a21ad1b-2ea2-42f7-8c14-e104c1ebc49e.png)
+
+8. W trakcie gry 
+
+![image](https://user-images.githubusercontent.com/73279676/199820786-417e2a49-e1df-4f77-afd8-4599d18a8b02.png)
+
+9. po ukończeniu gry
+
+![image](https://user-images.githubusercontent.com/73279676/199820840-c3c9e762-eb76-4890-a236-b72b770969e6.png)
