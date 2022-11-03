@@ -12,10 +12,23 @@ import PaperStoneScissors from "./Games/PaperStoneScissors/PaperStoneScissors";
 import Puns from "./Games/Puns/Puns";
 import TicTacToe from "./Games/TicTacToe/TicTacToe";
 
+import eyeOne from "../../../img/findapair/eye_one.png";
+import eyeTwo from "../../../img/findapair/eye_two.png";
+import eyeThree from "../../../img/findapair/eye_three.png";
+import eyeFour from "../../../img/findapair/eye_four.png";
+import eyeFive from "../../../img/findapair/eye_five.png";
+import eyeSix from "../../../img/findapair/eye_six.png";
+
 const socket = io();
 
+
+const delay = ms => new Promise(
+  resolve => setTimeout(resolve, ms)
+);
+
+
 function GameRoom() {
-  // config
+  // config  settings
   const navigate = useNavigate();
   const { state } = useLocation();
   const { userName, roomName, gameType } = state || "wrong data";
@@ -23,6 +36,8 @@ function GameRoom() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [users, setUsers] = useState([]);
   const [howManyConnectedUsers, setHowManyConnectedUsers] = useState(0);
+  const [otherPlayerTurn, setOtherPlayerTurn] = useState(true);
+  const [finishedGame, setFinishedGame] = useState(false);
 
   const whatGame = () => {
     if (gameType === "ticTacToe") {
@@ -48,7 +63,6 @@ function GameRoom() {
   const [isUserButtonHidden, setIsUserButtonHidden] = useState(false);
   const [isUserButtonDisabled, setIsUserButtonDisabled] = useState(false);
   const [resultGameOne, setResultGameOne] = useState([]);
-  const [finishedGame, setFinishedGame] = useState(false);
 
   // ticTacToe
 
@@ -65,15 +79,46 @@ function GameRoom() {
   ];
 
   const [disabledOption, setDisabledOption] = useState(optionsTTT);
-
-  const [otherPlayerTurn, setOtherPlayerTurn] = useState(true);
   const [isGameBoardHidden, setIsGameBoardHidden] = useState(false);
 
-  //
+  // findapair
+  const [loadingFindAPairData, setLoadingFindAPairData] = useState(false)
+  const [cardArrayNames, setCardArrayNames] = useState([]);
+  const [hiddenimage, setHiddenImage] = useState([
+    { id: 0, disable: true },
+    { id: 1, disable: true },
+    { id: 2, disable: true },
+    { id: 3, disable: true },
+    { id: 4, disable: true },
+    { id: 5, disable: true },
+    { id: 6, disable: true },
+    { id: 7, disable: true },
+    { id: 8, disable: true },
+    { id: 9, disable: true },
+    { id: 10, disable: true },
+    { id: 11, disable: true },
+  ]);
+  const [cardArray, setCardArray] = useState([
+    { id: 0, disable: true, hidden: false, name: "eye_one", img: eyeOne },
+    { id: 1, disable: true, hidden: false, name: "eye_two", img: eyeTwo },
+    { id: 2, disable: true, hidden: false, name: "eye_three", img: eyeThree },
+    { id: 3, disable: true, hidden: false, name: "eye_four", img: eyeFour },
+    { id: 4, disable: true, hidden: false, name: "eye_five", img: eyeFive },
+    { id: 5, disable: true, hidden: false, name: "eye_six", img: eyeSix },
+    { id: 6, disable: true, hidden: false, name: "eye_one", img: eyeOne },
+    { id: 7, disable: true, hidden: false, name: "eye_two", img: eyeTwo },
+    { id: 8, disable: true, hidden: false, name: "eye_three", img: eyeThree },
+    { id: 9, disable: true, hidden: false, name: "eye_four", img: eyeFour },
+    { id: 10,disable: true,  hidden: false,  name: "eye_five", img: eyeFive },
+    { id: 11,disable: true,  hidden: false,  name: "eye_six", img: eyeSix },
+  ]);
 
+  //
   const [gameName] = useState(whatGame());
 
-  const [data] = useState({ username: userName, roomname: roomName });
+  const [data] = useState({ username: userName, roomname: roomName, gamename: gameName, cardArray: cardArray });
+
+  //
 
   const addUser = (user) => {
     setUsers([...user]);
@@ -95,17 +140,14 @@ function GameRoom() {
     if (users.length === 1) {
       setHowManyConnectedUsers(1);
 
-    // TicTacToe who's first settings for now here
-   console.log(users)
-     if(users[0]===userName){
-    setOtherPlayerTurn(false)
-    }
-    //
-
+      // TicTacToe who's first settings for now here
+      if (users[0] === userName) {
+        setOtherPlayerTurn(false);
+      }
+      //
     }
     if (users.length === 2) {
       setHowManyConnectedUsers(2);
-
     }
 
     socket.on("message", (message) => {
@@ -174,10 +216,17 @@ function GameRoom() {
               setDisabled(false);
             }
           });
+          // random card on board
+          socket.on("findapair-prepareboard", async (newCardArray) => {
+            // setCardArray();
+            setCardArray(newCardArray);
+            // setCardArrayNames(newCardArray.map((item) => item.name && item.id && item.disable && item.hidden));
+        
+          });
+
           socket.on("join-info", (user) => {
             addUser(user);
           });
-  
         }
       } catch (e) {
         console.log(e);
@@ -197,23 +246,13 @@ function GameRoom() {
     navigate("/join-game", { state: { gameType: gameName } });
   };
 
-  // paperStone Scissors
-  const paperStoneScissors = async (userChoice) => {
-    setIsUserButtonDisabled(true);
-    socket.emit("paperStoneScissors", { userChoice, userName, roomName });
-    socket.on("result", (result) => {
-      setFinishedGame(!finishedGame);
-      setIsUserButtonHidden(true);
-      setIsUserButtonDisabled(false);
-      // socket.emit('disconnectUser', data)
-      setResultGameOne(result);
-    });
-
-    // gdy gracz 2 wybierze w przeciągu ? 10 sekund ? to wysyla dane do servera i sprawdza kto wygrał
-  };
-
   const playAgain = async () => {
     if (gameName[1] === "findAPair") {
+      setIsGameBoardHidden(false);
+      socket.on("findapair-prepareboard", async (newCardArray) => {
+        setCardArray(newCardArray);
+    
+      });
     }
     if (gameName[1] === "maze") {
     }
@@ -230,6 +269,70 @@ function GameRoom() {
     setFinishedGame(!finishedGame);
   };
 
+  socket.on("user-pick", async (data) => {
+    const user = data.userName;
+    if (gameName[1] === "ticTacToe") {
+      const { userChoice, type } = data;
+      disableButtonAndSetValue(userChoice, type);
+      if (user === userName) {
+        setOtherPlayerTurn(true);
+      } else {
+        setOtherPlayerTurn(false);
+      }
+    }
+    if (gameName[1] === "findAPair") {
+      const { userChoice, again } =  await data;
+      // aktualizowanie danych z findapair na boardzie
+  
+      if (again === true) {
+        
+        let insertDataToFirstUser =  cardArray.map((item) => (item.id === (userChoice[0].id) ? { ...item, disable : false, hidden : false } : item))
+        let insertDataToSecondUser =  insertDataToFirstUser.map((item) => (item.id === (userChoice[1].id) ? { ...item, disable : false, hidden : false } : item))
+         setCardArray(insertDataToSecondUser);
+        //  setOtherPlayerTurn(true)
+
+        return 
+
+      }
+
+      if (again === false) {
+        
+        await delay(1000)
+         let insertDataToFirstUser =  cardArray.map((item) => (item.id === (userChoice[0].id) ? { ...item, disable : true, hidden : false } : item))
+        let insertDataToSecondUser =  insertDataToFirstUser.map((item) => (item.id === (userChoice[1].id) ? { ...item, disable : true, hidden : false } : item))
+    
+        //  setCardArray(insertDataToFirstUser);
+         setCardArray(insertDataToSecondUser);
+    
+
+  
+  
+      }
+      if (user === userName) {
+        //  console.log(cardArray)
+         setOtherPlayerTurn(true);
+      } else {
+        // console.log(cardArray)
+        setOtherPlayerTurn(false);
+      }
+    }
+  });
+
+  // paperStone Scissors
+  const paperStoneScissors = async (userChoice) => {
+    setIsUserButtonDisabled(true);
+    socket.emit("paperStoneScissors", { userChoice, userName, roomName });
+    socket.on("result", (result) => {
+      setFinishedGame(!finishedGame);
+      setIsUserButtonHidden(true);
+      setIsUserButtonDisabled(false);
+      // socket.emit('disconnectUser', data)
+      setResultGameOne(result);
+    });
+
+    // gdy gracz 2 wybierze w przeciągu ? 10 sekund ? to wysyla dane do servera i sprawdza kto wygrał
+  };
+
   /// ticTacToe
 
   const ticTacToe = async (userChoice, e) => {
@@ -242,20 +345,10 @@ function GameRoom() {
       setFinishedGame(!finishedGame);
       setIsGameBoardHidden(true);
       setResultGameOne(result);
-
     });
   };
 
-  socket.on("user-pick", (data) => {
-    const { userChoice, type } = data;
-    const user = data.userName;
-    disableButtonAndSetValue(userChoice, type);
-    if (user === userName) {
-      setOtherPlayerTurn(true);
-    } else {
-      setOtherPlayerTurn(false);
-    }
-  });
+
 
   // disable options tictactoe
   const disableButtonAndSetValue = (userPick, type) => {
@@ -269,6 +362,36 @@ function GameRoom() {
     }
 
     setDisabledOption(newDisabledOption);
+  };
+
+  // findapair
+
+  socket.on("findAPair-info", async ( userChoice)=> {
+
+    if(userChoice[0].name!==userChoice[1].name){
+    setOtherPlayerTurn(true)
+    }
+    
+    let insertDataToFirstUser =  cardArray.map((item) => (item.id === (userChoice[0].id) ? { ...item, disable : true, hidden : true } : item))
+    let insertDataToFSecondUser = insertDataToFirstUser.map((item) => (item.id === (userChoice[1].id) ? { ...item, disable : true, hidden : true } : item))
+      setCardArray(insertDataToFSecondUser);
+    
+})
+
+  const findAPair = async (e, userChoice, buttonID) => {
+    e.preventDefault()
+    // e.target.disabled=true
+    // if(loadingFindAPairData===false){
+    //   setLoadingFindAPairData(true)
+    socket.emit("findAPair", { userName, roomName, userChoice });
+
+  // }
+    socket.on("result", (result) => {
+      setFinishedGame(!finishedGame);
+      setIsGameBoardHidden(true);
+      setResultGameOne(result);
+    });
+ 
   };
 
   return (
@@ -312,7 +435,18 @@ function GameRoom() {
               )}
               {(howManyConnectedUsers === 2 || finishedGame) && users.filter((user) => user === userName).length === 1 && (
                 <div className="game-container__board--started-game">
-                  {gameName[1] === "findAPair" && <FindAPair gameType={gameName[1]}></FindAPair>}
+                  {gameName[1] === "findAPair" && (
+                    <FindAPair
+                      gameType={gameName[1]}
+                      cardArray={cardArray}
+                      findAPair={findAPair}
+                      hiddenimage={hiddenimage}
+                      otherPlayerTurn={otherPlayerTurn}
+                      resultGame={resultGameOne}
+                      isGameBoardHidden={isGameBoardHidden}
+                      playAgain={playAgain}
+                    ></FindAPair>
+                  )}
                   {gameName[1] === "maze" && <Maze gameType={gameName[1]}></Maze>}
                   {gameName[1] === "paperStoneScissors" && (
                     <PaperStoneScissors

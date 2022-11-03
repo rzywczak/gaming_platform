@@ -24,8 +24,6 @@ const TicTacToeSchema = new mongoose.Schema(
       minlength: 1,
       maxlength: 255,
     },
-
- 
   },
   {
     timestamps: true,

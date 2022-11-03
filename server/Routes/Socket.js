@@ -2,11 +2,18 @@ const { Server } = require("socket.io");
 const UserInRoom = require("../Models/UserInRoomModel");
 const PaperStoneScissors = require("../Models/PaperStoneScissorsModel");
 const TicTacToe = require("../Models/TicTacToeModel");
+const FindAPair = require("../Models/FindAPairModel");
+const { deleteMany } = require("../Models/UserInRoomModel");
 // const { emit } = require("../Models/UserInRoomModel")
 
 const socketRouter = (httpServer) => {
   const io = new Server(httpServer);
 
+
+  const delay = ms => new Promise(
+    resolve => setTimeout(resolve, ms)
+  );
+  
   // paperStoneScissors
 
   //
@@ -22,7 +29,7 @@ const socketRouter = (httpServer) => {
     console.log("WebSocket connection");
 
     // tworzenie pokoju z username, roomname i socketID
-    socket.on("join-game", async ({ username, roomname }, callback) => {
+    socket.on("join-game", async ({ username, roomname, gamename, cardArray }, callback) => {
       const isRoomExist = await UserInRoom.findByCredentials(username, roomname);
       try {
         // console.log(isRoomExist)
@@ -52,6 +59,12 @@ const socketRouter = (httpServer) => {
         const whoConnected = await usersNamesInRoom.map((user) => user.userName);
         // const whoConnectedData = { whoConnected: whoConnected+roomname, roomname: roomname}
         io.to(roomname).emit("join-info", whoConnected);
+        if(gamename[1]==="findAPair"&& await UserInRoom.countUsersInRoom(roomname)===2){
+          const newCardArray =  cardArray.sort(() => 0.5 - Math.random());
+          io.to(roomname).emit("findapair-prepareboard", newCardArray)
+        }
+
+
         console.log("user connected " + socket.id + " users in room " + roomname + " : " + whoConnected);
         callback();
       } catch (e) {
@@ -77,7 +90,7 @@ const socketRouter = (httpServer) => {
         // usuwanie opcji w danej grze w momęcie disconnecta
         const usersNamesInRoom = await UserInRoom.findAllUsersInRoom(roomname);
         const whoIsConnected = await usersNamesInRoom.map((user) => user.userName);
-
+        
         // console.log('user disconnected'+' users in room : '+userInRoom.userName)
 
         // console.log("AKTYWNE POKOJE Z DISKONEKTA PRZED: ");
@@ -87,6 +100,12 @@ const socketRouter = (httpServer) => {
         socket.leave(roomname);
         io.to(roomname).emit("disconnect-info", whoIsConnected);
 
+      const roomGame1 = await PaperStoneScissors.findOne({roomName: roomname})
+        const roomGame2 = await TicTacToe.findOne({roomName: roomname})
+        const roomGame3 = await FindAPair.findOne({roomName: roomname})
+        await PaperStoneScissors.deleteOne(roomGame1);
+        await TicTacToe.deleteOne(roomGame2);
+        await FindAPair.deleteOne(roomGame3);
         // console.log("AKTYWNE POKOJE Z DISKONEKTA PO: ");
         // console.log(socket.rooms);
         // console.log(socket.id)
@@ -94,6 +113,7 @@ const socketRouter = (httpServer) => {
         console.log(e);
       }
     });
+    // PaperStoneScissors
     socket.on("paperStoneScissors", async (data) => {
       const { userChoice, userName, roomName } = await data;
       const userPick = await new PaperStoneScissors({ userChoice: userChoice, userName: userName, roomName: roomName });
@@ -229,11 +249,91 @@ const socketRouter = (httpServer) => {
       }
     });
 
+
+    // FindAPair
+    socket.on("findAPair", async (data) => {
+      io.to(data.roomName).emit("findAPair-info", ([data.userChoice, data.userChoice]))
+      const {userName, roomName, userChoice} = await data
+
+      const userExist = await FindAPair.findOne({ userName: userName});
+
+
+
+      if(userExist===null){
+        console.log( "User created, waiting for secound choice...")
+        const user = await new FindAPair({ userChoice: userChoice, userName: userName, roomName: roomName });
+        await user.save();
+        return "User created, waiting for secound choice..."
+     }
+     const checkUserFirstChoice = await FindAPair.haveUserPicked(userName, roomName);
+      if(checkUserFirstChoice===null){
+         console.log("UPDATE USER CHOICE W PROGRESS...")
+         await FindAPair.updateUserChoice(userChoice, userName);
+         return "Waiting for secound choice..."
+      }
+
+      if(checkUserFirstChoice!==null&&userChoice.name!==null){
+        io.to(roomName).emit("findAPair-info", ([userChoice, checkUserFirstChoice]))
+        // console.log(userChoice+" : "+checkUser.userChoice)
+        if(userChoice.name===checkUserFirstChoice.name){
+          console.log("Dostałeś punkt i jest znowu twoja tura")
+          await FindAPair.updateUserPointsAndChoice(userName);
+          console.log(checkUserFirstChoice)
+          console.log(userChoice)
+          io.to(roomName).emit("user-pick" ,{ userName: "", userChoice: [userChoice, checkUserFirstChoice], again:true})
+         
+        }
+        if(userChoice.name!==checkUserFirstChoice.name){
+          console.log("Tura przeciwnika bo nie udało CI się zgadnąć pary ")
+          console.log(checkUserFirstChoice)
+          console.log(userChoice)
+          await FindAPair.updateUserChoice(null, userName);
+          io.to(roomName).emit("user-pick" ,{ userName: userName, userChoice: [userChoice, checkUserFirstChoice], again:false})
+        }
+
+
+      }
+      const howManyUsersPick = await FindAPair.howManyUsersPick(roomName)
+      if(howManyUsersPick>=2){
+      const points = await FindAPair.howManyPoints(roomName) 
+      if(points>=6){
+        console.log("Wygrał "+userName+"!" )
+        io.to(roomName).emit('result' ,{ userName: userName, message: "Wygrał "+userName+"!"  })
+        await FindAPair.deleteMany({ roomName: data.roomName });
+      }
+    }
+
+      
+
+
+      // if(userChoicefromdata)
+      // zaczyna osoba która pierwsza się połączy 
+      // podaje dwa razy zapyranie z danymi w tym po pierwszym czeka na drugie a w drugim sprawdza czy obrazki są takie same 
+      // gdy są takie same wtedy zwraca informacje o punkcie +1 i o możliwości ponownego wyboru 
+
+
+      // suma punktów równa 6 to zakończenie gry i podsumowanie wyników 
+      // punkty gracza1 === punkty gracza drugiego wtedy remis 
+      // gdy pkt gracz 1 > od pkt gracz 2 === gracz 1 win  
+      // gdy pkt gracz 2 > od pkt gracz 1 === gracz 2 win  
+    
+
+    })
+
+
+
     socket.on("disconnect", async () => {
       const room = await UserInRoom.findRoomBySocketId(socket.id);
+
       if (room !== null) {
         const usersNamesInRoom = room.userName;
+      const roomGame1 = await PaperStoneScissors.findOne({roomName: room.roomName})
+      const roomGame2 = await TicTacToe.findOne({roomName: room.roomName})
+      const roomGame3 = await FindAPair.findOne({roomName: room.roomName})
         await UserInRoom.deleteOne(room);
+        await PaperStoneScissors.deleteOne(roomGame1);
+        await TicTacToe.deleteOne(roomGame2);
+        await FindAPair.deleteOne(roomGame3);
         socket.leave(room);
         io.emit("message", usersNamesInRoom);
         console.log(socket.id + " User disconnected");
