@@ -1,23 +1,37 @@
 .findapair-items {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  background: black;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
 
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    align-items: center;
-    background: black;
-    width: 100%;
-    height: 100%;
-    margin: 0;
+.findapair-item {
+  flex: 0 0 24%;
+  height: 32%;
+  font-size: 32px;
+  z-index: 100;
+  &__img {
+    pointer-events: none;
   }
-  
-  .findapair-item {
-    flex: 0 0 24%;
-    height: 32%;
-    font-size: 32px;
-    z-index: 100;
-    &__img {
-      pointer-events: none;
-      
-    }
-  }
-  
+}
+
+.try-again-button {
+  font-family: "Courier New", Courier, monospace;
+  cursor: pointer;
+  margin-bottom: 12px;
+  padding: 15px;
+  background-color: #7c5cbf;
+  border-radius: 15px;
+  color: rgb(0, 0, 0);
+  font-size: 16px;
+  font-weight: 600;
+  //   transition: background 0.3s ease;
+}
+.try-again-button:hover {
+  cursor: pointer;
+  background-color: #ffb703;
+}

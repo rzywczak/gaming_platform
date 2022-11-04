@@ -1,8 +1,20 @@
 import React from 'react'
+import Board from "./Board"
+import { FunctionalIFrameComponent } from './functional'
+import "./Puns.scss"
 
-function Puns() {
+function Puns(props) {
   return (
-    <div>Puns</div>
+    <>
+
+ <FunctionalIFrameComponent className="iframe" title="functional-iframe" scrolling="no">
+ <Board socket={props.socket} ></Board>
+        </FunctionalIFrameComponent>
+    
+
+  </>
+
+  
   )
 }
 

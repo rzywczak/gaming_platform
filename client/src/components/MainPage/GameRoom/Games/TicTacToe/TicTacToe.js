@@ -13,7 +13,7 @@ function TicTacToe(props) {
 
 
    
-      {props.isGameBoardHidden ? <div>{props.resultGame.message} <button onClick={() => props.playAgain()}>Zagraj poownie</button> </div> :
+      {props.isGameBoardHidden ? <div>{props.resultGame.message} <button className="try-again-button" onClick={() => props.playAgain()}>Zagraj poownie</button> </div> :
 
       <div className="tictactoe-items">
             <button className="tictactoe-item" onClick={(e) => props.ticTacToe(0,e)} disabled={props.disabledOption[0].disable||props.otherPlayerTurn}>{props.disabledOption[0].signType}</button> 

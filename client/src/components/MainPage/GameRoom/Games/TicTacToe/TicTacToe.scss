@@ -13,6 +13,25 @@
 .tictactoe-item {
   flex: 0 0 32%;
   height: 32%;
-  font-size: 32px;
+  font-size: 60px;
+  color: black;
 
+}
+
+
+.try-again-button {
+  font-family: "Courier New", Courier, monospace;
+  cursor: pointer;
+  margin-bottom: 12px;
+  padding: 15px;
+  background-color: #7c5cbf;
+  border-radius: 15px;
+  color: rgb(0, 0, 0);
+  font-size: 16px;
+  font-weight: 600;
+  //   transition: background 0.3s ease;
+}
+.try-again-button:hover {
+  cursor: pointer;
+  background-color: #ffb703;
 }

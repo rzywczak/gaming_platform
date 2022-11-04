@@ -100,12 +100,10 @@ const socketRouter = (httpServer) => {
         socket.leave(roomname);
         io.to(roomname).emit("disconnect-info", whoIsConnected);
 
-      const roomGame1 = await PaperStoneScissors.findOne({roomName: roomname})
-        const roomGame2 = await TicTacToe.findOne({roomName: roomname})
-        const roomGame3 = await FindAPair.findOne({roomName: roomname})
-        await PaperStoneScissors.deleteOne(roomGame1);
-        await TicTacToe.deleteOne(roomGame2);
-        await FindAPair.deleteOne(roomGame3);
+
+        await PaperStoneScissors.deleteMany({roomName: roomname});
+        await TicTacToe.deleteMany({roomName: roomname});
+        await FindAPair.deleteMany({roomName: roomname});
         // console.log("AKTYWNE POKOJE Z DISKONEKTA PO: ");
         // console.log(socket.rooms);
         // console.log(socket.id)
@@ -195,6 +193,9 @@ const socketRouter = (httpServer) => {
       const howManyUsersPick = await TicTacToe.howManyUsersPick(roomName);
 
       if (howManyUsersPick.length <= 1) {
+        if (howManyUsersPick[0].userName === userName) {
+          sign.type = 0;
+        }
         io.to(roomName).emit("user-pick", { userName: userName, userChoice: userChoice, type: sign.type });
       } else {
         if (howManyUsersPick[0].userName === userName) {
@@ -303,37 +304,26 @@ const socketRouter = (httpServer) => {
       }
     }
 
-      
-
-
-      // if(userChoicefromdata)
-      // zaczyna osoba która pierwsza się połączy 
-      // podaje dwa razy zapyranie z danymi w tym po pierwszym czeka na drugie a w drugim sprawdza czy obrazki są takie same 
-      // gdy są takie same wtedy zwraca informacje o punkcie +1 i o możliwości ponownego wyboru 
-
-
-      // suma punktów równa 6 to zakończenie gry i podsumowanie wyników 
-      // punkty gracza1 === punkty gracza drugiego wtedy remis 
-      // gdy pkt gracz 1 > od pkt gracz 2 === gracz 1 win  
-      // gdy pkt gracz 2 > od pkt gracz 1 === gracz 2 win  
-    
-
     })
 
+    // socket.on("puns", async (data, roomname) => {
+    //   console.log(roomname)
+    //   // console.log(data)
+    //    io.to(roomname).emit('puns', data);
 
+    // })
+    socket.on('puns', (data) => socket.broadcast.emit('puns', data));
 
     socket.on("disconnect", async () => {
       const room = await UserInRoom.findRoomBySocketId(socket.id);
 
       if (room !== null) {
         const usersNamesInRoom = room.userName;
-      const roomGame1 = await PaperStoneScissors.findOne({roomName: room.roomName})
-      const roomGame2 = await TicTacToe.findOne({roomName: room.roomName})
-      const roomGame3 = await FindAPair.findOne({roomName: room.roomName})
+
         await UserInRoom.deleteOne(room);
-        await PaperStoneScissors.deleteOne(roomGame1);
-        await TicTacToe.deleteOne(roomGame2);
-        await FindAPair.deleteOne(roomGame3);
+        await PaperStoneScissors.deleteMany({roomName: room.roomName});
+        await TicTacToe.deleteMany({roomName: room.roomName});
+        await FindAPair.deleteMany({roomName: room.roomName});
         socket.leave(room);
         io.emit("message", usersNamesInRoom);
         console.log(socket.id + " User disconnected");

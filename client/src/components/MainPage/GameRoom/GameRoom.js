@@ -21,11 +21,7 @@ import eyeSix from "../../../img/findapair/eye_six.png";
 
 const socket = io();
 
-
-const delay = ms => new Promise(
-  resolve => setTimeout(resolve, ms)
-);
-
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 function GameRoom() {
   // config  settings
@@ -82,7 +78,7 @@ function GameRoom() {
   const [isGameBoardHidden, setIsGameBoardHidden] = useState(false);
 
   // findapair
-  const [loadingFindAPairData, setLoadingFindAPairData] = useState(false)
+  const [loadingFindAPairData, setLoadingFindAPairData] = useState(false);
   const [cardArrayNames, setCardArrayNames] = useState([]);
   const [hiddenimage, setHiddenImage] = useState([
     { id: 0, disable: true },
@@ -109,8 +105,8 @@ function GameRoom() {
     { id: 7, disable: true, hidden: false, name: "eye_two", img: eyeTwo },
     { id: 8, disable: true, hidden: false, name: "eye_three", img: eyeThree },
     { id: 9, disable: true, hidden: false, name: "eye_four", img: eyeFour },
-    { id: 10,disable: true,  hidden: false,  name: "eye_five", img: eyeFive },
-    { id: 11,disable: true,  hidden: false,  name: "eye_six", img: eyeSix },
+    { id: 10, disable: true, hidden: false, name: "eye_five", img: eyeFive },
+    { id: 11, disable: true, hidden: false, name: "eye_six", img: eyeSix },
   ]);
 
   //
@@ -136,10 +132,17 @@ function GameRoom() {
 
     if (users.lenght === 0) {
       setHowManyConnectedUsers(0);
+        // tictactoe reset data to default
+      if(gameName[1]==="ticTacToe"){
+        setDisabledOption(optionsTTT)
+      }
     }
     if (users.length === 1) {
       setHowManyConnectedUsers(1);
-
+      // tictactoe reset data to default
+      if(gameName[1]==="ticTacToe"){
+      setDisabledOption(optionsTTT)
+    }
       // TicTacToe who's first settings for now here
       if (users[0] === userName) {
         setOtherPlayerTurn(false);
@@ -221,7 +224,6 @@ function GameRoom() {
             // setCardArray();
             setCardArray(newCardArray);
             // setCardArrayNames(newCardArray.map((item) => item.name && item.id && item.disable && item.hidden));
-        
           });
 
           socket.on("join-info", (user) => {
@@ -251,7 +253,6 @@ function GameRoom() {
       setIsGameBoardHidden(false);
       socket.on("findapair-prepareboard", async (newCardArray) => {
         setCardArray(newCardArray);
-    
       });
     }
     if (gameName[1] === "maze") {
@@ -281,36 +282,37 @@ function GameRoom() {
       }
     }
     if (gameName[1] === "findAPair") {
-      const { userChoice, again } =  await data;
+      const { userChoice, again } = await data;
       // aktualizowanie danych z findapair na boardzie
-  
+
       if (again === true) {
-        
-        let insertDataToFirstUser =  cardArray.map((item) => (item.id === (userChoice[0].id) ? { ...item, disable : false, hidden : false } : item))
-        let insertDataToSecondUser =  insertDataToFirstUser.map((item) => (item.id === (userChoice[1].id) ? { ...item, disable : false, hidden : false } : item))
-         setCardArray(insertDataToSecondUser);
+        let insertDataToFirstUser = cardArray.map((item) =>
+          item.id === userChoice[0].id ? { ...item, disable: false, hidden: false } : item
+        );
+        let insertDataToSecondUser = insertDataToFirstUser.map((item) =>
+          item.id === userChoice[1].id ? { ...item, disable: false, hidden: false } : item
+        );
+        setCardArray(insertDataToSecondUser);
         //  setOtherPlayerTurn(true)
 
-        return 
-
+        return;
       }
 
       if (again === false) {
-        
-        await delay(1000)
-         let insertDataToFirstUser =  cardArray.map((item) => (item.id === (userChoice[0].id) ? { ...item, disable : true, hidden : false } : item))
-        let insertDataToSecondUser =  insertDataToFirstUser.map((item) => (item.id === (userChoice[1].id) ? { ...item, disable : true, hidden : false } : item))
-    
-        //  setCardArray(insertDataToFirstUser);
-         setCardArray(insertDataToSecondUser);
-    
+        await delay(1000);
+        let insertDataToFirstUser = cardArray.map((item) =>
+          item.id === userChoice[0].id ? { ...item, disable: true, hidden: false } : item
+        );
+        let insertDataToSecondUser = insertDataToFirstUser.map((item) =>
+          item.id === userChoice[1].id ? { ...item, disable: true, hidden: false } : item
+        );
 
-  
-  
+        //  setCardArray(insertDataToFirstUser);
+        setCardArray(insertDataToSecondUser);
       }
       if (user === userName) {
         //  console.log(cardArray)
-         setOtherPlayerTurn(true);
+        setOtherPlayerTurn(true);
       } else {
         // console.log(cardArray)
         setOtherPlayerTurn(false);
@@ -348,8 +350,6 @@ function GameRoom() {
     });
   };
 
-
-
   // disable options tictactoe
   const disableButtonAndSetValue = (userPick, type) => {
     let newDisabledOption = [...disabledOption];
@@ -366,37 +366,47 @@ function GameRoom() {
 
   // findapair
 
-  socket.on("findAPair-info", async ( userChoice)=> {
-
-    if(userChoice[0].name!==userChoice[1].name){
-    setOtherPlayerTurn(true)
+  socket.on("findAPair-info", async (userChoice) => {
+    if (userChoice[0].name !== userChoice[1].name) {
+      setOtherPlayerTurn(true);
     }
-    
-    let insertDataToFirstUser =  cardArray.map((item) => (item.id === (userChoice[0].id) ? { ...item, disable : true, hidden : true } : item))
-    let insertDataToFSecondUser = insertDataToFirstUser.map((item) => (item.id === (userChoice[1].id) ? { ...item, disable : true, hidden : true } : item))
-      setCardArray(insertDataToFSecondUser);
-    
-})
+
+    let insertDataToFirstUser = cardArray.map((item) =>
+      item.id === userChoice[0].id ? { ...item, disable: true, hidden: true } : item
+    );
+    let insertDataToFSecondUser = insertDataToFirstUser.map((item) =>
+      item.id === userChoice[1].id ? { ...item, disable: true, hidden: true } : item
+    );
+    setCardArray(insertDataToFSecondUser);
+  });
 
   const findAPair = async (e, userChoice, buttonID) => {
-    e.preventDefault()
+    e.preventDefault();
     // e.target.disabled=true
     // if(loadingFindAPairData===false){
     //   setLoadingFindAPairData(true)
     socket.emit("findAPair", { userName, roomName, userChoice });
 
-  // }
+    // }
     socket.on("result", (result) => {
       setFinishedGame(!finishedGame);
       setIsGameBoardHidden(true);
       setResultGameOne(result);
     });
- 
   };
+
+  // puns
+  const puns = async () => {
+
+    
+  }
+
 
   return (
     <div>
+
       {isLoading && (
+
         <div className="game-container">
           <GameMenu disconnectUser={disconnectUser} goToOtherRoom={goToOtherRoom}></GameMenu>
           <ToastContainer position="bottom-right" theme="colored" />
@@ -458,7 +468,7 @@ function GameRoom() {
                       playAgain={playAgain}
                     ></PaperStoneScissors>
                   )}
-                  {gameName[1] === "puns" && <Puns gameType={gameName[1]}></Puns>}
+                  {gameName[1] === "puns" && <Puns gameType={gameName[1]} socket={socket} roomName={roomName}></Puns>}
                   {gameName[1] === "ticTacToe" && (
                     <TicTacToe
                       ticTacToe={ticTacToe}
@@ -477,6 +487,7 @@ function GameRoom() {
           {/* } */}
         </div>
       )}
+      
     </div>
   );
 }

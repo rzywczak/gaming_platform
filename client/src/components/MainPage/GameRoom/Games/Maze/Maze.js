@@ -7,3 +7,5 @@ function Maze() {
 }
 
 export default Maze
+
+

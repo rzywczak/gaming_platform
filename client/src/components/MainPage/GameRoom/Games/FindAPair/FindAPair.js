@@ -19,7 +19,7 @@ function FindAPair(props) {
   return (
     <>
 
-      {props.isGameBoardHidden ? <div>{props.resultGame.message} <button onClick={() => props.playAgain()}>Zagraj poownie</button> </div> :
+      {props.isGameBoardHidden ? <div>{props.resultGame.message} <button className="try-again-button" onClick={() => props.playAgain()}>Zagraj poownie</button> </div> :
 
         <div className="findapair-items">
             <button className="findapair-item" onClick={(e) => props.findAPair(e,{name: props.cardArray[0].name, id: props.cardArray[0].id})} disabled={!props.cardArray[0].disable||props.otherPlayerTurn} >{props.cardArray[0].hidden && <img className="findapair-item__img" src={props.cardArray[0].img}  alt="X"></img>}</button>     
