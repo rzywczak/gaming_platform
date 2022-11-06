@@ -304,9 +304,10 @@ const socketRouter = (httpServer) => {
       }
     });
 
-    socket.on("draw-puns", (data) => socket.broadcast.emit("draw-puns", data));
+
 
     socket.on("puns", async (data) => {
+      socket.on("draw-puns", (data) => socket.broadcast.emit("draw-puns", data));
       const { roomName, finishedTurn } = await data;
       const { userName, userAnswer, chosenWord } = await data.data;
       if (chosenWord.length >= 1) {

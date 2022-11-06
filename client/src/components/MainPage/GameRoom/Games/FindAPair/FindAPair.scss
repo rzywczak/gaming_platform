@@ -19,7 +19,13 @@
   }
 }
 
-.try-again-button {
+.try-again{
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+    width: 100%;
+
+&__button {
   font-family: "Courier New", Courier, monospace;
   cursor: pointer;
   margin-bottom: 12px;
@@ -31,7 +37,8 @@
   font-weight: 600;
   //   transition: background 0.3s ease;
 }
-.try-again-button:hover {
+&__button:hover {
   cursor: pointer;
   background-color: #ffb703;
+}
 }

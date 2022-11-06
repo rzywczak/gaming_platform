@@ -13,7 +13,7 @@ function Puns(props) {
   useEffect(() =>{
 
     setMessage(props.usersTypes)
-    console.log(message)
+
    if(props.drawUser===props.userName){
     setDisabled(true)
    }

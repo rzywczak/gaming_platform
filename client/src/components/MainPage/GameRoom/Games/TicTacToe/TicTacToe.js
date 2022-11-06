@@ -13,8 +13,8 @@ function TicTacToe(props) {
 
 
    
-      {props.isGameBoardHidden ? <div>{props.resultGame.message} <button className="try-again-button" onClick={() => props.playAgain()}>Zagraj poownie</button> </div> :
-
+      {props.isGameBoardHidden ? <div className="try-again">{props.resultGame.message} <button className="try-again__button" onClick={() => props.playAgain()}>Zagraj ponownie</button> </div> :
+   
       <div className="tictactoe-items">
             <button className="tictactoe-item" onClick={(e) => props.ticTacToe(0,e)} disabled={props.disabledOption[0].disable||props.otherPlayerTurn}>{props.disabledOption[0].signType}</button> 
             <button className="tictactoe-item" onClick={(e) => props.ticTacToe(1,e)} disabled={props.disabledOption[1].disable||props.otherPlayerTurn}>{props.disabledOption[1].signType}</button>
@@ -26,8 +26,8 @@ function TicTacToe(props) {
             <button className="tictactoe-item" onClick={(e) => props.ticTacToe(7,e)} disabled={props.disabledOption[7].disable||props.otherPlayerTurn}>{props.disabledOption[7].signType}</button>
             <button className="tictactoe-item" onClick={(e) => props.ticTacToe(8,e)} disabled={props.disabledOption[8].disable||props.otherPlayerTurn}>{props.disabledOption[8].signType}</button>
          
-        </div>
-
+      
+</div>
       }
     </>
   )

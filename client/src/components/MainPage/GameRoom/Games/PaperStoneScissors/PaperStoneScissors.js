@@ -1,8 +1,9 @@
 import React from 'react'
+import "./PaperStoneScissors.scss"
 
 function PaperStoneScissors(props) {
   return (
-    <div>
+    < >
     {/* <h1>{props.gameType}</h1> */}
     {/* {console.log(props.resultGame)} */}
 
@@ -10,25 +11,26 @@ function PaperStoneScissors(props) {
     
       <div>
                {/* <h1> {props.resultGame[0]}</h1> */}
-       <h1> {props.resultGame.message}</h1>
+      
           {/* {props.resultGame.map((result) => <h1 key={result}>{result}</h1>)} */}
       </div>
 
 
       {props.isUserButtonHidden ? 
-      
-          <button onClick={() => props.playAgain()}>Zagraj ponownie</button>
+          <div className="paperstonescissors-info" >
+          <h1> {props.resultGame.message}</h1>
+          <button className="paperstonescissors-info__button" onClick={() => props.playAgain()}>Zagraj ponownie</button></div>
       :
 
-        <div>
-            <button className="paperstonescissors-item" onClick={() => props.paperStoneScissors('bato')} disabled={props.disabled}>Kamień</button>
-            <button className="paperstonescissors-item" onClick={() => props.paperStoneScissors('papel')} disabled={props.disabled} >Papier</button>
-            <button className="paperstonescissors-item" onClick={() => props.paperStoneScissors('gunting')} disabled={props.disabled}>Nożyce</button> 
+        <div className="paperstonescissors">
+            <button className="paperstonescissors__item" onClick={() => props.paperStoneScissors('bato')} disabled={props.disabled}>Kamień</button>
+            <button className="paperstonescissors__item" onClick={() => props.paperStoneScissors('papel')} disabled={props.disabled} >Papier</button>
+            <button className="paperstonescissors__item" onClick={() => props.paperStoneScissors('gunting')} disabled={props.disabled}>Nożyce</button> 
         </div>
       }
           
 
-    </div>
+    </>
   )
 }
 
