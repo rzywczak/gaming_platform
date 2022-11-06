@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { createPortal } from 'react-dom'
+import "./Puns.scss";
 
 export const FunctionalIFrameComponent = ({
   children,

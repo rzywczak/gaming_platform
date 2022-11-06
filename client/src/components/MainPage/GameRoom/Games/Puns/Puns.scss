@@ -1,3 +1,5 @@
+@use "../../../../Colors/Colors.scss";
+ 
 .board {
   // z-index: -1;/
  position: relative;
@@ -5,15 +7,15 @@
   width: 100%;
 }
 .whiteboard {
-  position: absolute;
-//   background: transparent;
-//   overflow: hidden;
-  height: 100%;
-  width: 100%;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 0;
+//   position: absolute;
+// //   background: transparent;
+// //   overflow: hidden;
+//   height: 100%;
+//   width: 100%;
+//   left: 0;
+//   right: 0;
+//   bottom: 0;
+//   top: 0;
   // z-index: -1;
 }
 
@@ -46,9 +48,146 @@
 
 
 
-.iframe{
-    width: 100%;
+.puns{
+
+   &__iframe{
+
+  background-color: #ede4ca;
+    width: 80%;
     height: 100%;
     overflow: hidden;
+}
+}
+.puns-data{
+  display: flex;
+  // flex-direction: column;
+  flex-wrap: wrap;
+  // align-items: space-between;
+  // justify-content: space-between;
+  width: 20%;
+  height: 100%;
+  // column-gap: 100px;
+  // row-gap: 100px;
+
+  &__info{
+  
+    
+    // display: flex;
+    // align-items: center;
+    // justify-content: center;
+    // flex-direction: row;
+
+
+
+  }
+
+  &__info-draw{
+    position: relative;
+    max-width: 100%;
+ 
+  }
+
+  &__info-players-type{
+    
+    margin-top: 20px;
+
+  }
+
+  &__form{
+
+   display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+
+
+
+  color: black;
+
+
+
+
+  
+
+  &--input{
+    width: 60%;
+    outline: none;
+    border: none;
+    padding: 12px 0;
+    outline: none;
+
+  }
+  &--button{
+    width: 40%;
+    cursor: pointer;
+
+    padding: 12px 0;
+    background: Colors.$dark_purple;
+    border: none;
+    color: Colors.$white;
+    text-decoration: none;
+    font-weight: 600;
+
+  }
+  &--button:hover {
+    background: Colors.$purple;
+  }
+
+
+
+
+  }
+}
+
+.puns-chosen-word{
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  &__form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 0px 17px 1px #1d1f26;
+    background: #f7f7fa;
+    color: black;
+    padding: 24px;
+    border-radius: 25px;
+    width: 50%;
+    min-width: 450px;
+
+    &--input {
+      border: 1px solid #eeeeee;
+      padding: 12px;
+      outline: none;
+      margin: 12px 0  ;
+    }
+  
+    &--button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      width: 30%;
+     margin: 0 0 12px 0;
+      padding: 12px;
+      background: Colors.$dark_purple;
+      border: none;
+      color: Colors.$white;
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 25px;
+    }
+    &--button:hover {
+      background: Colors.$purple;
+    }
+
+
+
+  }
+  
 
 }

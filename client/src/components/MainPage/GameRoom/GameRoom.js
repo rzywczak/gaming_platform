@@ -109,7 +109,12 @@ function GameRoom() {
     { id: 11, disable: true, hidden: false, name: "eye_six", img: eyeSix },
   ]);
 
-  //
+  //maze
+  const [finishedTurn, setFinishedTurn] = useState(true);
+  const [ chosenWord, setChosenWord ] = useState("")
+ const [ drawUser ,setDrawUser] = useState("")
+  const [ usersTypes, setUsersTypes] = useState([{ id: 0, userName: "", userAnswer: ""}])
+ //
   const [gameName] = useState(whatGame());
 
   const [data] = useState({ username: userName, roomname: roomName, gamename: gameName, cardArray: cardArray });
@@ -132,20 +137,21 @@ function GameRoom() {
 
     if (users.lenght === 0) {
       setHowManyConnectedUsers(0);
-        // tictactoe reset data to default
-      if(gameName[1]==="ticTacToe"){
-        setDisabledOption(optionsTTT)
+      // tictactoe reset data to default
+      if (gameName[1] === "ticTacToe") {
+        setDisabledOption(optionsTTT);
       }
     }
     if (users.length === 1) {
       setHowManyConnectedUsers(1);
       // tictactoe reset data to default
-      if(gameName[1]==="ticTacToe"){
-      setDisabledOption(optionsTTT)
-    }
+      if (gameName[1] === "ticTacToe") {
+        setDisabledOption(optionsTTT);
+      }
       // TicTacToe who's first settings for now here
       if (users[0] === userName) {
         setOtherPlayerTurn(false);
+        setDrawUser(userName)
       }
       //
     }
@@ -272,6 +278,16 @@ function GameRoom() {
 
   socket.on("user-pick", async (data) => {
     const user = data.userName;
+    if (gameName[1] === "puns") {
+      // const { userChoice, type } = data;
+      // disableButtonAndSetValue(userChoice, type);
+
+      if (user === userName) {
+        setOtherPlayerTurn(true);
+      } else {
+        setOtherPlayerTurn(false);
+      }
+    }
     if (gameName[1] === "ticTacToe") {
       const { userChoice, type } = data;
       disableButtonAndSetValue(userChoice, type);
@@ -395,18 +411,62 @@ function GameRoom() {
     });
   };
 
-  // puns
-  const puns = async () => {
+  // -------------------- puns
 
+  socket.on("puns", async ({ finishedTurn, userAnswer, drawingUser, chosenword, username }) => {
+    // console.log(userAnswer,finishedTurn,userName)/
+
+    setChosenWord(chosenword)
+    if(drawingUser!==null&&drawingUser!==undefined){
     
-  }
+      // console.log(drawingUser)
+      // console.log("wykonaj sie raz po zmianie rysującego")
+      setFinishedTurn(false)
+    setDrawUser(drawingUser)
+    }
+    if(finishedTurn===true){
+      // console.log(userAnswer,finishedTurn,userName, "UKOŃCZONO TURE")
+      setUsersTypes( [{ id: 0, userName: "", userAnswer: ""}])
+     
+    setFinishedTurn(true)
+ 
+    setOtherPlayerTurn(true)
 
+    if(drawingUser===userName){
+      setOtherPlayerTurn(false)
+      setDrawUser(drawingUser)
+      // console.log(otherPlayerTurn,userName,drawingUser)
+    }
+    }
+    if(finishedTurn===false){
+      // console.log(userAnswer,finishedTurn,userName, "NIE UKONCZONO TURY")
+      socket.on("message-puns", (message) => { 
+   
+        setUsersTypes( [ ...usersTypes, {  id: usersTypes.length,userName: message.userName+": ", userAnswer: message.userAnswer}])
+        })
+      
+    }
+  })
+
+
+  const puns = async (e, data) => {
+    e.preventDefault();
+    e.target[0].value = ""
+    // console.log(data)
+
+    if(data.chosenWord.lenght>=1){
+      // setOtherPlayerTurn(false)
+     setFinishedGame(false)
+    }
+     socket.emit("puns", ({data: data,finishedTurn: false,roomName: roomName}));
+    //  if(data.userAnswer.length>=1){
+  
+    // }
+  };
 
   return (
     <div>
-
       {isLoading && (
-
         <div className="game-container">
           <GameMenu disconnectUser={disconnectUser} goToOtherRoom={goToOtherRoom}></GameMenu>
           <ToastContainer position="bottom-right" theme="colored" />
@@ -421,7 +481,7 @@ function GameRoom() {
                   <h1 className="game-container__room-info--users">Gracze:</h1>
                   <h2 className="game-container__room-info--user">
                     {users.map((user) => (
-                      <div key={user}>{user}</div>
+                      <div key={user}>{user === userName ? user + "(Ty)" : user}</div>
                     ))}
                   </h2>
                 </div>
@@ -468,7 +528,20 @@ function GameRoom() {
                       playAgain={playAgain}
                     ></PaperStoneScissors>
                   )}
-                  {gameName[1] === "puns" && <Puns gameType={gameName[1]} socket={socket} roomName={roomName}></Puns>}
+                  {gameName[1] === "puns" && (
+                    <Puns
+                      gameType={gameName[1]}
+                      socket={socket}
+                      roomName={roomName}
+                      userName={userName}
+                      puns={puns}
+                      otherPlayerTurn={otherPlayerTurn}
+                      finishedTurn={finishedTurn}
+                      chosenWord={chosenWord}
+                      drawUser={drawUser}
+                      usersTypes={usersTypes}
+                    ></Puns>
+                  )}
                   {gameName[1] === "ticTacToe" && (
                     <TicTacToe
                       ticTacToe={ticTacToe}
@@ -487,7 +560,6 @@ function GameRoom() {
           {/* } */}
         </div>
       )}
-      
     </div>
   );
 }
