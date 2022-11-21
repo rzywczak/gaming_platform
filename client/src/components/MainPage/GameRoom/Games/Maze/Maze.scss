@@ -1,0 +1,55 @@
+// @import url("../../../../../img/finishLine.png"); 
+
+.board{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+
+    &__maze{
+        width: 100%;
+        height: 100%;
+        display: grid;
+        background: #c29dc6;
+        grid-template-rows: repeat(12, 1fr);
+        grid-template-columns: repeat(12, 1fr);
+        border: 5px solid #060606;
+        color: rgb(0, 0, 0);
+
+    
+    &--item{
+        // border: solid 5px #c969d2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        &--avatar{
+          
+            width: 30%;
+            height: 30%;
+            border-radius: 25%;
+            z-index: 2;
+         
+        }
+        &--finish-line{
+            // background-image: url("../../../../../img/finishLine.png");
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            z-index: 0;
+
+        }
+    }
+ 
+    }
+}
+
+#avatar-p1{
+    background-color: #28b93b;
+}
+
+
+#avatar-p2{
+    background-color: #cf2e2e;
+}

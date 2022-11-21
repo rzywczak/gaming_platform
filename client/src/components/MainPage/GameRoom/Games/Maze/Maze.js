@@ -1,8 +1,19 @@
 import React from 'react'
+import Board from "./Board"
+import "./Maze.scss"
 
-function Maze() {
+
+function Maze(props) {
   return (
-    <div>Maze</div>
+    <>
+    
+     { !props.endRound ? 
+     <Board props={props}></Board> 
+     :
+     <div>{props.winMessage}</div>
+     }
+    
+    </>
   )
 }
 

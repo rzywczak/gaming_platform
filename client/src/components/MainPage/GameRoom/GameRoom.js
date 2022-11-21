@@ -109,7 +109,7 @@ function GameRoom() {
     { id: 11, disable: true, hidden: false, name: "eye_six", img: eyeSix },
   ]);
 
-  //maze
+  //puns
   const [finishedTurn, setFinishedTurn] = useState(true);
   const [ chosenWord, setChosenWord ] = useState("")
  const [ drawUser ,setDrawUser] = useState("")
@@ -120,6 +120,19 @@ function GameRoom() {
   const [data] = useState({ username: userName, roomname: roomName, gamename: gameName, cardArray: cardArray });
 
   //
+
+  // maze 
+  const [generatedMaze] = useState([]);
+  const [loadedMaze, setLoadedMaze] = useState(false);
+  const [endRound, setEndRound] = useState(false)
+  const [loadedDataMaze, setLoadedDataMaze] = useState(false)
+  const [winMessage, setWinMessage] = useState("")
+
+  let [cords, setCords] = useState([0, 11]);
+  let [currentPosition, setCurrentPosition] = useState(132)
+  let [currentPositionPlayer2, setCurrentPositionPlayer2] = useState(132)
+  let [cordsPlayer2, setCordsPlayer2] = useState([0,11])
+  let [finishLine] = useState([11,0])
 
   const addUser = (user) => {
     setUsers([...user]);
@@ -157,6 +170,7 @@ function GameRoom() {
     }
     if (users.length === 2) {
       setHowManyConnectedUsers(2);
+    
     }
 
     socket.on("message", (message) => {
@@ -226,11 +240,15 @@ function GameRoom() {
             }
           });
           // random card on board
+          if(gameName[1]==='findAPair'){
           socket.on("findapair-prepareboard", async (newCardArray) => {
             // setCardArray();
             setCardArray(newCardArray);
             // setCardArrayNames(newCardArray.map((item) => item.name && item.id && item.disable && item.hidden));
+            
           });
+        
+        }
 
           socket.on("join-info", (user) => {
             addUser(user);
@@ -278,6 +296,7 @@ function GameRoom() {
 
   socket.on("user-pick", async (data) => {
     const user = data.userName;
+    console.log(data)
     if (gameName[1] === "puns") {
       // const { userChoice, type } = data;
       // disableButtonAndSetValue(userChoice, type);
@@ -458,10 +477,131 @@ function GameRoom() {
       // setOtherPlayerTurn(false)
      setFinishedGame(false)
     }
+
      socket.emit("puns", ({data: data,finishedTurn: false,roomName: roomName}));
     //  if(data.userAnswer.length>=1){
   
     // }
+  };
+  // ------------------- Maze Game ---------------------
+ 
+ useEffect(() => {
+  // if(users[0]===userName){
+  //   setCurrentPosition(11)
+  // }
+  
+ },[users,userName])
+
+
+
+  useEffect(() => {
+ 
+
+
+    if(gameName[1]==='maze' && users.length===2){
+  
+    socket.emit("maze", ({ userName: userName, roomName: roomName, loadedMaze: loadedMaze }))
+  
+    socket.on('generate-maze',  ({ maze, loaded }) => {
+      
+      console.log("WYGENEROWANY LABIRYNT ")
+      if(loadedMaze===false){
+      let key = 0;
+       maze.map((row) =>
+        row.map((column) =>
+          generatedMaze.push({
+            x: column.x,
+            y: column.y,
+            top: column.top,
+            left: column.left,
+            bottom: column.bottom,
+            right: column.right,
+            key: key++,
+          })
+        )
+      )
+    setLoadedMaze(loaded)
+        
+        }
+     
+    })
+  
+
+  }
+  },[users,userName,roomName,loadedMaze,generatedMaze,gameName])
+
+  useEffect(() => {
+
+   if(loadedMaze===true && users.length===2){
+      socket.emit("maze", ({ userName: userName, endRound: endRound, roomName: roomName, userCords: cords, currentPosition: currentPosition, loadedMaze: loadedMaze }))
+      socket.on("client-data-maze", ({ userCords, currentPosition, userName }) => {
+        setCurrentPositionPlayer2(currentPosition)
+        setCordsPlayer2(userCords)
+        setLoadedDataMaze(true)
+        
+      }) 
+    }
+
+  },[endRound,userName,roomName,cords,currentPosition,loadedMaze,gameName,generatedMaze,users,currentPositionPlayer2])
+
+
+  const endMazeRound = () => {
+    setEndRound(true)
+    socket.on("maze", data => {
+      console.log(data)
+      setWinMessage(`${data.message} ${data.userName}`)
+    }) 
+    
+
+  }
+
+
+useEffect(() => {
+
+ 
+  if(currentPosition===11||currentPositionPlayer2===11){
+   
+    endMazeRound()
+ 
+  }
+
+
+},[currentPositionPlayer2,currentPosition])
+ 
+  // const maze = (e) => {
+
+  // } 
+
+  const playerMove = (e) => {
+    e.preventDefault();
+    // console.log(e.keyCode)
+    if(!endRound){
+      // console.log("move",cords[0],cords[1])
+      // UP
+    if (e.keyCode === 38 && (generatedMaze[currentPosition].top === false) && (cords[1]-1>=0)) {
+     
+      setCords([cords[0], cords[1]-1]);
+      setCurrentPosition(currentPosition-12)
+      
+    } 
+    // DOWN
+    else if (e.keyCode === 40 && (generatedMaze[currentPosition].bottom === false) && (cords[1]+1<=11)) {
+      setCords([cords[0], cords[1]+1]);
+      setCurrentPosition(currentPosition+12)
+    }
+    // LEFT
+    else if (e.keyCode === 37 && (generatedMaze[currentPosition].left === false) && (cords[0]-1>=0)) {
+
+      setCords([cords[0] - 1, cords[1]]);
+      setCurrentPosition(currentPosition-1)
+    }
+    // RIGHT
+    else if (e.keyCode === 39 && (generatedMaze[currentPosition].right === false && (cords[0]+1<=11)) ) {
+      setCords([cords[0] + 1,cords[1]]);
+      setCurrentPosition(currentPosition+1)
+    }
+  }
+
   };
 
   return (
@@ -517,7 +657,20 @@ function GameRoom() {
                       playAgain={playAgain}
                     ></FindAPair>
                   )}
-                  {gameName[1] === "maze" && <Maze gameType={gameName[1]}></Maze>}
+                  {gameName[1] === "maze" && <Maze
+                   gameType={gameName[1]}
+                   loadedMaze={loadedMaze}
+                   cords={cords}
+                   endRound={endRound}
+                   currentPosition={currentPosition}
+                   generatedMaze={generatedMaze}
+                   playerMove={playerMove}
+                   cordsPlayer2={cordsPlayer2}
+                   currentPositionPlayer2={currentPositionPlayer2}
+                   loadedDataMaze={loadedDataMaze}
+                   finishLine={finishLine}
+                   winMessage={winMessage}
+                   ></Maze>}
                   {gameName[1] === "paperStoneScissors" && (
                     <PaperStoneScissors
                       paperStoneScissors={paperStoneScissors}

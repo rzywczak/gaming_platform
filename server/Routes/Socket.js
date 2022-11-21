@@ -4,7 +4,10 @@ const PaperStoneScissors = require("../Models/PaperStoneScissorsModel");
 const TicTacToe = require("../Models/TicTacToeModel");
 const FindAPair = require("../Models/FindAPairModel");
 const Puns = require("../Models/PunsModel");
+const Maze = require("../Models/MazeModel");
 const { deleteMany } = require("../Models/UserInRoomModel");
+const generator = require('generate-maze');
+const { findOne } = require("../Models/MazeModel");
 // const { emit } = require("../Models/UserInRoomModel")
 
 const socketRouter = (httpServer) => {
@@ -101,6 +104,7 @@ const socketRouter = (httpServer) => {
         await TicTacToe.deleteMany({ roomName: roomname });
         await FindAPair.deleteMany({ roomName: roomname });
         await Puns.deleteMany({ roomName: roomname });
+        await Maze.deleteMany({ roomName: roomname });
         // console.log("AKTYWNE POKOJE Z DISKONEKTA PO: ");
         // console.log(socket.rooms);
         // console.log(socket.id)
@@ -170,10 +174,10 @@ const socketRouter = (httpServer) => {
 
     // TicTacToe
     socket.on("ticTacToe", async (data) => {
-      console.log("DANE JAKIEŚ Z TICTACTOE");
+      // console.log("DANE JAKIEŚ Z TICTACTOE");
 
       const { userChoice, userName, roomName } = await data;
-
+      
       const checkUser = await TicTacToe.haveUserPicked(userName, roomName);
       // console.log(haveUserPicked)
       if (!checkUser.haveUserPicked) {
@@ -255,14 +259,14 @@ const socketRouter = (httpServer) => {
       const userExist = await FindAPair.findOne({ userName: userName });
 
       if (userExist === null) {
-        console.log("User created, waiting for secound choice...");
+        // console.log("User created, waiting for secound choice...");
         const user = await new FindAPair({ userChoice: userChoice, userName: userName, roomName: roomName });
         await user.save();
         return "User created, waiting for secound choice...";
       }
       const checkUserFirstChoice = await FindAPair.haveUserPicked(userName, roomName);
       if (checkUserFirstChoice === null) {
-        console.log("UPDATE USER CHOICE W PROGRESS...");
+        // console.log("UPDATE USER CHOICE W PROGRESS...");
         await FindAPair.updateUserChoice(userChoice, userName);
         return "Waiting for secound choice...";
       }
@@ -271,7 +275,7 @@ const socketRouter = (httpServer) => {
         io.to(roomName).emit("findAPair-info", [userChoice, checkUserFirstChoice]);
         // console.log(userChoice+" : "+checkUser.userChoice)
         if (userChoice.name === checkUserFirstChoice.name) {
-          console.log("Dostałeś punkt i jest znowu twoja tura");
+          // console.log("Dostałeś punkt i jest znowu twoja tura");
           await FindAPair.updateUserPointsAndChoice(userName);
           console.log(checkUserFirstChoice);
           console.log(userChoice);
@@ -282,7 +286,7 @@ const socketRouter = (httpServer) => {
           });
         }
         if (userChoice.name !== checkUserFirstChoice.name) {
-          console.log("Tura przeciwnika bo nie udało CI się zgadnąć pary ");
+          // console.log("Tura przeciwnika bo nie udało CI się zgadnąć pary ");
           console.log(checkUserFirstChoice);
           console.log(userChoice);
           await FindAPair.updateUserChoice(null, userName);
@@ -305,7 +309,7 @@ const socketRouter = (httpServer) => {
     });
 
 
-
+    // Puns
     socket.on("puns", async (data) => {
       socket.on("draw-puns", (data) => socket.broadcast.emit("draw-puns", data));
       const { roomName, finishedTurn } = await data;
@@ -349,6 +353,46 @@ const socketRouter = (httpServer) => {
         io.to(roomName).emit("message-puns", ( {userName: userName, userAnswer: userAnswer}))
       }
     });
+   
+    // Maze
+    socket.on('maze', async ({ userName ,roomName,  endRound, userCords, currentPosition, loadedMaze }) => {
+     
+      console.log('test serwera')
+      if(endRound) {
+        socket.to(roomName).emit('maze', { message: `Wygrał gracz: `, userName})
+        return 
+      }
+      const isMazeGenerated = await Maze.find({ roomName: roomName })
+      if(loadedMaze && currentPosition!==undefined && userCords!==undefined){
+        socket.to(roomName).emit('client-data-maze', {endRound, userName, currentPosition, userCords})
+        return 
+      }
+     if(isMazeGenerated.length<=1 && !loadedMaze){
+
+      
+        if(isMazeGenerated.length===0){
+        const generateRandomNumberMaze = await Math.floor(Math.random() * 10000) + 1;
+        const userData = await new Maze({ generatedMazeSeed: generateRandomNumberMaze, userName: userName, roomName: roomName })
+        await userData.save()
+        }
+        const sendMaze = await Maze.find({ roomName: roomName })
+        // console.log(sendMaze)
+        if(sendMaze.length===2 ){
+          
+          const roomGeneratedMaze = await Maze.find({ roomName: roomName })
+          const generatedMazeKey = roomGeneratedMaze[0].generatedMazeSeed;
+          const maze = await generator(12, 12, false, generatedMazeKey);
+          socket.to(roomName).emit('generate-maze', {maze, loaded: true})
+     
+          console.log("test wysłania jednego wygenerowanego labiaryntu",userName)
+          }
+      
+     
+    }
+     
+   
+
+    })
 
     socket.on("disconnect", async () => {
       const room = await UserInRoom.findRoomBySocketId(socket.id);
@@ -361,6 +405,7 @@ const socketRouter = (httpServer) => {
         await TicTacToe.deleteMany({ roomName: room.roomName });
         await FindAPair.deleteMany({ roomName: room.roomName });
         await Puns.deleteMany({ roomName: room.roomName });
+        await Maze.deleteMany({ roomName: room.roomName });
         socket.leave(room);
         io.emit("message", usersNamesInRoom);
         console.log(socket.id + " User disconnected");
