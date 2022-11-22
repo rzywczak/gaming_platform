@@ -19,7 +19,7 @@ const port = process.env.PORT || 5000;
 const publicDirectoryPath = path.join(__dirname, "/public");
 
 const corsOptions = {
-  origin: ["http://localhost:3000", "http://localhost:5000", "https://platforma-rozrywkowa.herokuapp.com", ""],
+  origin: ["http://localhost:3000", "http://localhost:5000", "https://platforma-rozrywkowa.herokuapp.com",],
   methods: ["GET", "POST", "DELETE", "PUT", "UPDATE"],
   credentials: true,
 };

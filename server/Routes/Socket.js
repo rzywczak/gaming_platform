@@ -355,11 +355,14 @@ const socketRouter = (httpServer) => {
     });
    
     // Maze
-    socket.on('maze', async ({ userName ,roomName,  endRound, userCords, currentPosition, loadedMaze }) => {
+    socket.on('maze', async ({ userName ,roomName,  endRound, userCords, currentPosition, loadedMaze, winner }) => {
      
-      console.log('test serwera')
+ 
+
       if(endRound) {
-        socket.to(roomName).emit('maze', { message: `Wygrał gracz: `, userName})
+        console.log('koniec rundy')
+        socket.to(roomName).emit('maze', { message: `Wygrał gracz: `, winner})
+        await Maze.deleteMany({ roomName: roomName });
         return 
       }
       const isMazeGenerated = await Maze.find({ roomName: roomName })
@@ -369,8 +372,9 @@ const socketRouter = (httpServer) => {
       }
      if(isMazeGenerated.length<=1 && !loadedMaze){
 
+    
       
-        if(isMazeGenerated.length===0){
+        if(isMazeGenerated.length===0||isMazeGenerated[0].userName!==userName){
         const generateRandomNumberMaze = await Math.floor(Math.random() * 10000) + 1;
         const userData = await new Maze({ generatedMazeSeed: generateRandomNumberMaze, userName: userName, roomName: roomName })
         await userData.save()
@@ -378,7 +382,7 @@ const socketRouter = (httpServer) => {
         const sendMaze = await Maze.find({ roomName: roomName })
         // console.log(sendMaze)
         if(sendMaze.length===2 ){
-          
+              console.log('generowanie labiryntu')
           const roomGeneratedMaze = await Maze.find({ roomName: roomName })
           const generatedMazeKey = roomGeneratedMaze[0].generatedMazeSeed;
           const maze = await generator(12, 12, false, generatedMazeKey);

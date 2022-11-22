@@ -10,7 +10,12 @@ function Maze(props) {
      { !props.endRound ? 
      <Board props={props}></Board> 
      :
-     <div>{props.winMessage}</div>
+  
+     <div className="try-again">{props.winMessage} <button className="try-again__button"
+      //  onClick={() => props.playAgain()}
+       >
+       Zagraj poownie</button> </div> 
+     
      }
     
     </>

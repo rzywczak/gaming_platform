@@ -122,11 +122,14 @@ function GameRoom() {
   //
 
   // maze 
-  const [generatedMaze] = useState([]);
+  const [generatedMaze, setGeneratedMaze] = useState([]);
   const [loadedMaze, setLoadedMaze] = useState(false);
   const [endRound, setEndRound] = useState(false)
   const [loadedDataMaze, setLoadedDataMaze] = useState(false)
   const [winMessage, setWinMessage] = useState("")
+  const [winner, setWinner] = useState("")
+  const [playAgainInfo, setPlayAgainInfo] = useState(true)
+
 
   let [cords, setCords] = useState([0, 11]);
   let [currentPosition, setCurrentPosition] = useState(132)
@@ -247,6 +250,7 @@ function GameRoom() {
             // setCardArrayNames(newCardArray.map((item) => item.name && item.id && item.disable && item.hidden));
             
           });
+       
         
         }
 
@@ -280,9 +284,23 @@ function GameRoom() {
       });
     }
     if (gameName[1] === "maze") {
+      console.log("play again")
+      setEndRound(false)
+      // setLoadedMaze(false)
+      // setLoadedDataMaze(false)
+      
+      if(playAgainInfo){
+      joinGame()
+      setPlayAgainInfo(false)
+      }
+      
+      setGeneratedMaze([])
+      
     }
     if (gameName[1] === "paperStoneScissors") {
       setIsUserButtonHidden(false);
+   
+      
     }
     if (gameName[1] === "puns") {
     }
@@ -296,7 +314,8 @@ function GameRoom() {
 
   socket.on("user-pick", async (data) => {
     const user = data.userName;
-    console.log(data)
+
+  
     if (gameName[1] === "puns") {
       // const { userChoice, type } = data;
       // disableButtonAndSetValue(userChoice, type);
@@ -498,13 +517,12 @@ function GameRoom() {
  
 
 
-    if(gameName[1]==='maze' && users.length===2){
+    if((gameName[1]==='maze' && users.length===2) ){
   
     socket.emit("maze", ({ userName: userName, roomName: roomName, loadedMaze: loadedMaze }))
   
     socket.on('generate-maze',  ({ maze, loaded }) => {
       
-      console.log("WYGENEROWANY LABIRYNT ")
       if(loadedMaze===false){
       let key = 0;
        maze.map((row) =>
@@ -521,7 +539,8 @@ function GameRoom() {
         )
       )
     setLoadedMaze(loaded)
-        
+
+    console.log('wygenerowany labirynt ', userName)
         }
      
     })
@@ -532,41 +551,50 @@ function GameRoom() {
 
   useEffect(() => {
 
-   if(loadedMaze===true && users.length===2){
-      socket.emit("maze", ({ userName: userName, endRound: endRound, roomName: roomName, userCords: cords, currentPosition: currentPosition, loadedMaze: loadedMaze }))
+   if((loadedMaze===true && users.length===2) ){
+      socket.emit("maze", ({ userName: userName, endRound: endRound, roomName: roomName, userCords: cords, currentPosition: currentPosition, loadedMaze: loadedMaze, winner: winner }))
       socket.on("client-data-maze", ({ userCords, currentPosition, userName }) => {
         setCurrentPositionPlayer2(currentPosition)
         setCordsPlayer2(userCords)
         setLoadedDataMaze(true)
         
+
       }) 
     }
 
-  },[endRound,userName,roomName,cords,currentPosition,loadedMaze,gameName,generatedMaze,users,currentPositionPlayer2])
+  },[endRound,userName,roomName,cords,currentPosition,loadedMaze,gameName,generatedMaze,users,currentPositionPlayer2,winner])
 
+
+ 
+
+useEffect(() => {
 
   const endMazeRound = () => {
     setEndRound(true)
     socket.on("maze", data => {
-      console.log(data)
-      setWinMessage(`${data.message} ${data.userName}`)
+  
+      setWinMessage(`${data.message} ${data.winner}`)
+      setPlayAgainInfo(true)
     }) 
     
 
   }
 
-
-useEffect(() => {
-
- 
   if(currentPosition===11||currentPositionPlayer2===11){
-   
+    
+    if(currentPosition===11){
+      setWinner(userName)
+    }
+    if(currentPositionPlayer2===11){
+     users.map(user => user === userName ? "" :  setWinner(user) )
+      
+    }
     endMazeRound()
  
   }
 
 
-},[currentPositionPlayer2,currentPosition])
+},[currentPositionPlayer2,currentPosition,setWinner,users,winner,userName])
  
   // const maze = (e) => {
 
@@ -670,6 +698,7 @@ useEffect(() => {
                    loadedDataMaze={loadedDataMaze}
                    finishLine={finishLine}
                    winMessage={winMessage}
+                   playAgain={playAgain}
                    ></Maze>}
                   {gameName[1] === "paperStoneScissors" && (
                     <PaperStoneScissors
