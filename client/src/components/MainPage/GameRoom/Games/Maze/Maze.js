@@ -12,7 +12,7 @@ function Maze(props) {
      :
   
      <div className="try-again">{props.winMessage} <button className="try-again__button"
-      //  onClick={() => props.playAgain()}
+       onClick={() => props.playAgain()}
        >
        Zagraj poownie</button> </div> 
      

@@ -1,0 +1,32 @@
+@use "../../Colors/Colors.scss";
+
+.main-content-about {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 88vh;
+  width: 100%;
+//   background: Colors.$light_purple;
+  color: Colors.$white;
+
+  &__title{
+    // font-size: 52px;
+    margin-bottom: 50px;
+    font-size: 42px;
+  }
+
+    &__list{
+        list-style: none;
+      
+
+    &--item{
+        margin-top: 15px;
+      
+
+    }
+
+    }
+    
+
+}

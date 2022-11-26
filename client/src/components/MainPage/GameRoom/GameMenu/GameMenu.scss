@@ -1,5 +1,6 @@
 // @import url("https://fonts.googleapis.com/css2?family=Karla:wght@200;400&display=swap");
 
+@use "../../../Colors/Colors.scss";
 
 
 .game-container-nav {
@@ -7,11 +8,13 @@
   width: 100%;
   display: flex;
   align-items: center;
+  justify-content: center;
   position: relative;
   // padding: 0.5rem 0rem;
-  background-color: #403061;
+  background-color: #391b72;
 
-  color: black;
+  color: white;
+  font-weight: 600;
 
 
   &__title{
@@ -30,36 +33,58 @@
 
 
   &__menu{
-    margin-left: auto;
+   
+    width: 100%;
 
-    
+    &--list-elements{
+      display: flex;
+      align-items: center;
+    }
     ul{
         display: flex;
         padding: 0;
+        justify-content: right;
     }
     li{
-        border: 1px solid #1d152c;
-        font-weight: 600;
-        background-color: #7C5CBF;
-        border-radius: 15px;
-        padding: 15px;
+        // border: 1px solid #1d152c;
+        // padding: 15px;
         list-style-type: none;
-        margin: 0 1rem;
+        margin: 20px;
         transition: background .3s ease;
+        font-family: Colors.$font-stack;
+        font-weight: 600;
+        // background: Colors.$light_purple;
+        // cursor: pointer;
+        // color: Colors.$white;
+        // font-size: 16px;
+        // border-radius: 25px;
+        // margin-top: 8px;
+
     }
     li:hover{
       cursor: pointer;
-      background-color: #FFB703;
+      color: white;
+      // background: Colors.$dark_purple;
     }
      &--options{
-        text-decoration: none;
-        display: block;
-        color: rgb(0, 0, 0);
-        width: 100%;
+      list-style-type: none;
+      // margin: 20px;
+      transition: background .3s ease;
+      font-family: Colors.$font-stack;
+      font-weight: 600;
     }
     &--options:hover {
-        color: rgb(0, 0, 0);
+        color:rgb(165, 165, 165);
         cursor: pointer;
+    }
+    &--logout{
+      margin-left: 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0 1rem;
+
     }
 
   }
@@ -69,4 +94,17 @@
 
 article h1 {
   margin: 1rem 0;
+}
+
+
+.start-play {
+  padding: 10px 20px;
+  background: Colors.$yellow;
+  border-radius: 15px;
+  color: Colors.$black;
+  transition: background 0.3s ease;
+}
+.start-play:hover {
+  background: Colors.$yellow_light;
+  color: Colors.$black;
 }

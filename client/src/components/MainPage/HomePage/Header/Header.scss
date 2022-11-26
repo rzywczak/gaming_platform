@@ -8,8 +8,9 @@
   justify-content: space-between;
   position: relative;
   padding: 0.5rem 0rem;
-  background: Colors.$purple;
+  background: #391b72;
   font-weight: 600;
+  font-family: Colors.$font-stack;
 
   color: Colors.$black;
   &__logo {
@@ -48,6 +49,8 @@
       color: Colors.$white;
 
       &-button {
+        font-family: Colors.$font-stack;
+        font-weight: 600;
         background: Colors.$light_purple;
         padding: 12px;
         cursor: pointer;

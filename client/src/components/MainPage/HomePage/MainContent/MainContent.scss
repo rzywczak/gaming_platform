@@ -6,18 +6,26 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  height: 80vh;
+  height: 88vh;
   width: 100%;
-  background: Colors.$light_purple;
+  // background: Colors.$light_purple;
   color: Colors.$white;
+
+  &__title{
+    text-align: center;
+    width: 100%;
+    letter-spacing: 5px;
+    font-size: 52px;
+    margin-bottom: 20px;
+  }
 
   &__game-panel {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    width: 20vw;
-    min-width: 250px;
+    width: 32vw;
+    min-width: 315px;
     height: 50vh;
 
     &--game-type {
@@ -26,9 +34,11 @@
       justify-content: center;
       cursor: pointer;
       width: 100%;
-      padding: 12px;
-      margin-top: 5px;
-      background: Colors.$dark_purple;
+      letter-spacing: 2px;
+      font-size: larger;
+      padding: 28px;
+      margin-top: 10px;
+      background: #391b72;;
       border: none;
       color: Colors.$white;
       text-decoration: none;
@@ -38,12 +48,20 @@
     &--game-type:hover {
       background: Colors.$purple;
     }
+
+    &--title {
+      // display: flex;
+      // justify-content: space-between;
+      text-align: center;
+      width: 100%;
+      letter-spacing: 5px;
+      font-size: 52px;
+      margin-bottom: 20px;
+  
+    }
   }
 
-  &__title {
-    font-size: 72px;
-    margin-bottom: 20px;
-  }
+ 
   .start-play {
     padding: 10px 20px;
     background: Colors.$yellow;
@@ -55,7 +73,7 @@
     border: none;
   }
   .start-play:hover {
-    background: Colors.$yellow_light;
+    background: #ffa600;
     color: Colors.$black;
   }
 }

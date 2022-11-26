@@ -9,7 +9,7 @@ function HomePage() {
     
     <Header />
     <MainContent />
-    <Footer />
+    {/* <Footer /> */}
 
     </>
   )

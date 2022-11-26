@@ -29,6 +29,8 @@ const socketRouter = (httpServer) => {
   io.on("connection", (socket) => {
     console.log("WebSocket connection");
 
+
+    
     // tworzenie pokoju z username, roomname i socketID
     socket.on("join-game", async ({ username, roomname, gamename, cardArray }, callback) => {
       const isRoomExist = await UserInRoom.findByCredentials(username, roomname);
@@ -355,14 +357,17 @@ const socketRouter = (httpServer) => {
     });
    
     // Maze
-    socket.on('maze', async ({ userName ,roomName,  endRound, userCords, currentPosition, loadedMaze, winner }) => {
-     
- 
 
-      if(endRound) {
+
+
+    socket.on('maze', async ({ userName ,roomName,  endRound, userCords, currentPosition, loadedMaze, winner, resultMazeGameInfo }) => {
+     
+     
+      const checkUsers = await Maze.find({ roomName: roomName })
+      if(resultMazeGameInfo&&checkUsers.length>=1) {
         console.log('koniec rundy')
         socket.to(roomName).emit('maze', { message: `Wygrał gracz: `, winner})
-        await Maze.deleteMany({ roomName: roomName });
+        await Maze.deleteMany({ userName: userName });
         return 
       }
       const isMazeGenerated = await Maze.find({ roomName: roomName })
@@ -370,33 +375,48 @@ const socketRouter = (httpServer) => {
         socket.to(roomName).emit('client-data-maze', {endRound, userName, currentPosition, userCords})
         return 
       }
-     if(isMazeGenerated.length<=1 && !loadedMaze){
 
+      console.log("TEST")
+     if(isMazeGenerated.length<=1 && !loadedMaze && !resultMazeGameInfo ){
+     
+      console.log( userName )
     
       
-        if(isMazeGenerated.length===0||isMazeGenerated[0].userName!==userName){
-        const generateRandomNumberMaze = await Math.floor(Math.random() * 10000) + 1;
+        if((isMazeGenerated.length===0||isMazeGenerated[0].userName!==userName)&&isMazeGenerated.length!==2){
+        const generateRandomNumberMaze =  Math.floor(Math.random() * 10000) + 1;
         const userData = await new Maze({ generatedMazeSeed: generateRandomNumberMaze, userName: userName, roomName: roomName })
+        // const userExist = await Maze.find({userName: userName})
+        // console.log(userExist)
+        // if(userExist.length===0){
         await userData.save()
+        // }
         }
         const sendMaze = await Maze.find({ roomName: roomName })
-        // console.log(sendMaze)
-        if(sendMaze.length===2 ){
+        console.log(sendMaze.length)
+        socket.to(roomName).emit('usersInMazeGame', {mazeData :sendMaze.length, sendMaze: sendMaze })
+  
+        if(sendMaze.length>=1){
+        
               console.log('generowanie labiryntu')
           const roomGeneratedMaze = await Maze.find({ roomName: roomName })
           const generatedMazeKey = roomGeneratedMaze[0].generatedMazeSeed;
-          const maze = await generator(12, 12, false, generatedMazeKey);
-          socket.to(roomName).emit('generate-maze', {maze, loaded: true})
+          // const maze = await generator(12, 12, false, generatedMazeKey);
+          socket.to(roomName).emit('generate-maze', {maze: generatedMazeKey, loaded: true})
      
           console.log("test wysłania jednego wygenerowanego labiaryntu",userName)
           }
       
      
     }
-     
-   
+ })
 
-    })
+    // socket.on('mazeInfo', async ({roomName},callback) => {
+    //   // const sendMaze = await Maze.find({ roomName: roomName })
+    //   // console.log(roomName)
+    //   // console.log(sendMaze.length)
+    //   return callback({ sendMaze: sendMaze.length }) 
+    // })
+
 
     socket.on("disconnect", async () => {
       const room = await UserInRoom.findRoomBySocketId(socket.id);

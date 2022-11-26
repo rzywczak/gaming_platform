@@ -1,6 +1,8 @@
+@use "../../Colors/Colors.scss";
+
 .game-container {
   position: relative;
-  background-color: #403061;
+  // background-color: #403061;
 
   &__room-info {
     display: flex;
@@ -21,29 +23,39 @@
     // justify-content: center;
     flex-direction: column;
     width: 100%;
-    background-color: #403061;
+    // background-color: #403061;
     height: 88vh;
 
     &--join-button {
       position: absolute;
       top: 50%;
       left: 50%;
-      translate: transform(-50%, -50%);
+      transform: translate(-50%, -50%);
       font-family: "Courier New", Courier, monospace;
       cursor: pointer;
-      margin-bottom: 12px;
-      padding: 15px;
-      background-color: #7C5CBF;
-      border-radius: 15px;
-      color: rgb(0, 0, 0);
-      font-size: 16px;
-      font-weight: 600;
+      padding: 20px;
+      font-size: 22px;
       max-width: 150px;
+      background:Colors.$light_purple;
+      text-decoration: none;
+      font-weight: 600;
+      width: 100%;
+      margin-right: 55px;
+      background: Colors.$yellow;
+      border-radius: 25px;
+      color: Colors.$black;
+      transition: background 0.3s ease;
+      font-weight: 600;
+      border: none;
+      text-decoration: none;
+   
       //   transition: background 0.3s ease;
     }
     &--join-button:hover {
       cursor: pointer;
-      background-color: #FFB703;
+     
+      background: #FBA500;
+      color: Colors.$black;
     }
     &--join-button:disabled {
       cursor: default;
@@ -55,13 +67,13 @@
         justify-content: center;
         align-items: center;
         width: 80%;
-        height: 80%;
+        height: 90%;
         background-color: grey;
         color: white;
      
 
         &-info{
-           
+      
             font-size: 2rem;
         }
     }
@@ -74,9 +86,9 @@
         // justify-content:center;
         align-items: center;
         width: 80%;
-        height: 80%;
+        height: 90%;
         color: white;
-        background-color: #2d3962;
+        background-color: #391b72;
 
         // .tictactoe-items{}
         .tictactoe-item{
@@ -87,12 +99,13 @@
     }
 
     &--info{
-      // display: flex;
+      display: flex;
       justify-content: space-between;
       align-items: center;
       color: white;
       margin-bottom: 15px;
       width: 80%;
+
 
 
       h2{

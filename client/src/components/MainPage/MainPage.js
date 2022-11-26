@@ -85,7 +85,7 @@ function MainPage() {
           <div>
             <Header logged={logged} logout={logout} userName={userName} />
             <MainContent logged={logged} games={games} />
-            <Footer logged={logged} />
+            {/* <Footer logged={logged} /> */}
             <ToastContainer position="bottom-right" theme="colored" />
           </div>
         </div>

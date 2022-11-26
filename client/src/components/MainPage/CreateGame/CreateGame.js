@@ -56,7 +56,7 @@ useEffect(() => {
           }catch (e) {
           console.log(e);
           if(e.response.status===400){
-            toast.error('Ta nazwa pokoju jest już w użyciu!')
+            toast.error('Nieprawidłowa nazwa pokoju lub hasło')
             }
             else{
             toast.error(e.message)

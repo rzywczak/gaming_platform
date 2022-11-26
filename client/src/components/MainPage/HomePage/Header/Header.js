@@ -18,7 +18,7 @@ function Header(props) {
           </ul>
 
           <div className="header__navbar--logout">
-            <div>Użytkownik {props.userName}</div>
+            <div>{props.userName}</div>
             <button className="header__navbar--logout-button" onClick={props.logout}>
               Wyloguj się
             </button>
@@ -28,7 +28,10 @@ function Header(props) {
         <nav className="header__navbar">
           <ul className="header__navbar--ul">
             <li className="header__navbar--li">
-              <Link to={{ pathname: "/" }}>Jak Grać</Link>
+              <Link to={{ pathname: "/about" }}>O platformie</Link>
+            </li>
+            <li className="header__navbar--li">
+              <Link to={{ pathname: "/how-to-play" }}>Jak Grać</Link>
             </li>
             <li className="header__navbar--li">
               <Link className="start-play" to={{ pathname: "/login" }}>

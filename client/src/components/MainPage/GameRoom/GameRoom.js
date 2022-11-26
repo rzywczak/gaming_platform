@@ -11,6 +11,8 @@ import Maze from "./Games/Maze/Maze";
 import PaperStoneScissors from "./Games/PaperStoneScissors/PaperStoneScissors";
 import Puns from "./Games/Puns/Puns";
 import TicTacToe from "./Games/TicTacToe/TicTacToe";
+import  generator from 'generate-maze';
+import axios from "axios"
 
 import eyeOne from "../../../img/findapair/eye_one.png";
 import eyeTwo from "../../../img/findapair/eye_two.png";
@@ -129,7 +131,12 @@ function GameRoom() {
   const [winMessage, setWinMessage] = useState("")
   const [winner, setWinner] = useState("")
   const [playAgainInfo, setPlayAgainInfo] = useState(true)
-
+  const [usersInMazeGame, setUsersInMazeGame] = useState([])
+  const [resultMazeGameInfo, setResultMazeGameInfo] = useState(false)
+  const [loaded, setLoaded] = useState()
+  const [maze, setMaze] = useState()
+  const [generateMazeAgain, setGenerateMazeAgain] = useState(false)
+  const [userWithMazeData ,setUserWithMazeData] = useState(userName)
 
   let [cords, setCords] = useState([0, 11]);
   let [currentPosition, setCurrentPosition] = useState(132)
@@ -140,6 +147,20 @@ function GameRoom() {
   const addUser = (user) => {
     setUsers([...user]);
     setDisabled(false);
+  };
+
+  const logout = async () => {
+    try {
+      await axios.get(`/api/users/logout`, { headers: axiosAuth() });
+      localStorage.removeItem("token");
+      localStorage.removeItem("username");
+    } catch (e) {
+      console.log(e);
+    }
+
+    // setLogged(false);
+    navigate("/");
+    // setLoggedInfoUser(true)
   };
 
   useEffect(() => {
@@ -284,17 +305,29 @@ function GameRoom() {
       });
     }
     if (gameName[1] === "maze") {
-      console.log("play again")
-      setEndRound(false)
-      // setLoadedMaze(false)
-      // setLoadedDataMaze(false)
+
+
+
+      // setGenerateMazeAgain(true);
+      // setResultMazeGameInfo(false)
+
+     
+
+      // socket.emit("mazeInfo", ({roomName}),callback => {
+      //   console.log(callback)
+      //   setUsersInMazeGame(callback)
+      // })
       
-      if(playAgainInfo){
-      joinGame()
-      setPlayAgainInfo(false)
-      }
-      
-      setGeneratedMaze([])
+      socket.on("usersInMazeGame", ({mazeData, sendMaze}) => {
+        // console.log(sendMaze)
+        setUsersInMazeGame(mazeData)
+    
+      })
+
+    
+      // }
+      // console.log(endRound, generatedMaze, loadedMaze, loadedDataMaze, playAgainInfo)
+   
       
     }
     if (gameName[1] === "paperStoneScissors") {
@@ -515,54 +548,117 @@ function GameRoom() {
 
   useEffect(() => {
  
+    
+    // console.log(endRound, loadedMaze, loadedDataMaze, playAgainInfo, generatedMaze.length)
+    if(((gameName[1]==='maze' && users.length===2 && generatedMaze.length===0)) || generateMazeAgain){
+      setGenerateMazeAgain(false)
 
-
-    if((gameName[1]==='maze' && users.length===2) ){
   
-    socket.emit("maze", ({ userName: userName, roomName: roomName, loadedMaze: loadedMaze }))
-  
-    socket.on('generate-maze',  ({ maze, loaded }) => {
+    socket.emit("maze", ({ userName: userName, roomName: roomName, loadedMaze: loadedMaze, endRound: endRound, winner: winner, resultMazeGameInfo: resultMazeGameInfo}))
       
-      if(loadedMaze===false){
-      let key = 0;
-       maze.map((row) =>
-        row.map((column) =>
-          generatedMaze.push({
-            x: column.x,
-            y: column.y,
-            top: column.top,
-            left: column.left,
-            bottom: column.bottom,
-            right: column.right,
-            key: key++,
-          })
-        )
-      )
-    setLoadedMaze(loaded)
-
-    console.log('wygenerowany labirynt ', userName)
-        }
-     
+    socket.on("usersInMazeGame", ({mazeData, sendMaze}) => {
+      // console.log(sendMaze)
+      setUsersInMazeGame(mazeData)
+      // console.log(mazeData)
+      // console.log(sendMaze)
+      setUserWithMazeData(sendMaze)
+      
     })
+
+    console.log(usersInMazeGame)
+    // || sendMaze!==userName
+    console.log(userWithMazeData)
+    console.log( userWithMazeData!==userName)
+   if((usersInMazeGame===2 || endRound===false) || userWithMazeData[0].userName!==userName){
+  
+ 
+   
+       socket.on('generate-maze', ({ maze, loaded }) => {
+        console.log(maze)
+      
+    const generatedMazeData = generator(12, 12, false, maze);
+     // console.log(generatedMazeData)
+    if(((loadedMaze===false &&  (users.length===2 || usersInMazeGame>=1)))&&(generatedMaze.length===0)){
+    let key = 0;
+  
+    generatedMazeData.map((row) =>
+      row.map((column) =>
+        generatedMaze.push({
+          x: column.x,
+          y: column.y,
+          top: column.top,
+          left: column.left,
+          bottom: column.bottom,
+          right: column.right,
+          key: key++,
+        })
+      )
+    )
+  setLoadedMaze(loaded)
+
+  console.log('wygenerowany labirynt ', userName)
+      }
+   
+  
+    })
+
+//     console.log('TRZECI WARUNEK')
+//     console.log( userWithMazeData.lenght===1)
+//     console.log(userWithMazeData.length)
+
+//     if(userWithMazeData[0].userName!==userName && endRound===true && userWithMazeData.length===1){
+
+//       console.log("TEST DLA DOWNA")
+//       if(((loadedMaze===false &&  (users.length===2 || usersInMazeGame>=1)))&&(generatedMaze.length===0)){
+   
+//        const generatedMazeData = generator(12, 12, false, userWithMazeData[0].generatedMazeSeed);
+//       let key = 0;
+    
+//       generatedMazeData.map((row) =>
+//         row.map((column) =>
+//           generatedMaze.push({
+//             x: column.x,
+//             y: column.y,
+//             top: column.top,
+//             left: column.left,
+//             bottom: column.bottom,
+//             right: column.right,
+//             key: key++,
+//           })
+//         )
+//       )
+//     setLoadedMaze(loaded)
+//     // setEndRound(false)
+//     console.log('wygenerowany labirynt ', userName)
+ 
+//      }
+// }
+
+  }
+    // console.log(usersInMazeGame)
+    
   
 
   }
-  },[users,userName,roomName,loadedMaze,generatedMaze,gameName])
+  },[users,userName,roomName,loadedMaze,generatedMaze,gameName,usersInMazeGame,loaded,maze,generateMazeAgain,endRound,userWithMazeData,resultMazeGameInfo,winner])
+
+ 
 
   useEffect(() => {
 
-   if((loadedMaze===true && users.length===2) ){
-      socket.emit("maze", ({ userName: userName, endRound: endRound, roomName: roomName, userCords: cords, currentPosition: currentPosition, loadedMaze: loadedMaze, winner: winner }))
+   if((loadedMaze===true &&  (users.length===2 ||usersInMazeGame===2) && endRound===false) ){
+    
+      socket.emit("maze", ({ userName: userName, endRound: endRound, roomName: roomName, userCords: cords, currentPosition: currentPosition, loadedMaze: loadedMaze, winner: winner,resultMazeGameInfo: resultMazeGameInfo }))
       socket.on("client-data-maze", ({ userCords, currentPosition, userName }) => {
         setCurrentPositionPlayer2(currentPosition)
         setCordsPlayer2(userCords)
         setLoadedDataMaze(true)
-        
+    
 
       }) 
     }
 
-  },[endRound,userName,roomName,cords,currentPosition,loadedMaze,gameName,generatedMaze,users,currentPositionPlayer2,winner])
+  },[endRound,userName,roomName,cords,currentPosition,loadedMaze,gameName,generatedMaze,users,currentPositionPlayer2,winner,usersInMazeGame])
 
 
  
@@ -571,17 +667,32 @@ useEffect(() => {
 
   const endMazeRound = () => {
     setEndRound(true)
+
+
+  
     socket.on("maze", data => {
   
       setWinMessage(`${data.message} ${data.winner}`)
-      setPlayAgainInfo(true)
-    }) 
-    
 
+    }) 
+
+    setUsersInMazeGame([])
+    setGeneratedMaze([])
+    setLoadedDataMaze(false)
+    setLoadedMaze(false)
+    setResultMazeGameInfo(true)
+    setCurrentPosition(132)
+    setCurrentPositionPlayer2(132)
+    setCords([0,11])
+    setCordsPlayer2([0,11])
+
+    socket.emit("maze", ({ userName: userName, roomName: roomName, loadedMaze: loadedMaze, endRound: endRound, winner: winner, resultMazeGameInfo: resultMazeGameInfo}))
   }
 
   if(currentPosition===11||currentPositionPlayer2===11){
     
+    
+
     if(currentPosition===11){
       setWinner(userName)
     }
@@ -636,7 +747,7 @@ useEffect(() => {
     <div>
       {isLoading && (
         <div className="game-container">
-          <GameMenu disconnectUser={disconnectUser} goToOtherRoom={goToOtherRoom}></GameMenu>
+          <GameMenu disconnectUser={disconnectUser} goToOtherRoom={goToOtherRoom} userName={userName} logout={logout}></GameMenu>
           <ToastContainer position="bottom-right" theme="colored" />
           {/* <div>{console.log(users.filter(user => user===userName).length)}</div>
     {users.filter(user => user===userName)===userName ? 

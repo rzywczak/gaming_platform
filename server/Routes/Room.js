@@ -41,11 +41,28 @@ router.post('/api/rooms/join' ,async (req, res) => {
 
 
 //get room data
-router.get("/api/rooms/:id", auth, async (req, res) => {
-    // console.log('data user'+req.user)
-    res.send(req.room)
+// router.get("/api/rooms/:id", auth, async (req, res) => {
+//     // console.log('data user'+req.user)
+//   console.log('test')
+//     res.send(req.room)
   
-});
+// });
+
+//get actuall game room data
+
+router.get('/api/rooms/:game', auth, async (req, res) => {
+
+  const gameType = req.params.game
+  // console.log(req)
+  try{
+
+  const rooms = await Room.find({gameType: gameType})
+  res.send({ rooms })
+  }
+  catch (e){
+    res.status(404).send()
+  }
+})
 
 
 
