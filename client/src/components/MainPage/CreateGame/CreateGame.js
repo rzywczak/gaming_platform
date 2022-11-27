@@ -48,9 +48,9 @@ useEffect(() => {
            )
            e.target[0].value='';
            e.target[1].value='';
-  
+            
           toast.success('Pomyślnie stworzono pokój!')
-          console.log(values)
+          props.getRoomList()
 
           // console.log(data);
           }catch (e) {

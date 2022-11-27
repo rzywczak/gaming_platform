@@ -8,15 +8,15 @@
   flex-direction: column;
   height: 88vh;
   width: 100%;
-  // background: Colors.$light_purple;
   color: Colors.$white;
 
   &__title{
     text-align: center;
     width: 100%;
+    font-weight: 600;
     letter-spacing: 5px;
     font-size: 52px;
-    margin-bottom: 20px;
+    margin-bottom: 90px;
   }
 
   &__game-panel {
@@ -63,8 +63,10 @@
 
  
   .start-play {
-    padding: 10px 20px;
+    padding: 15px 30px;
+ 
     background: Colors.$yellow;
+    font-size: 24px;
     border-radius: 15px;
     color: Colors.$black;
     transition: background 0.3s ease;

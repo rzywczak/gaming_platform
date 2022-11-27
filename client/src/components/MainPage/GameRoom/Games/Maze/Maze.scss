@@ -47,12 +47,14 @@
 }
 
 #avatar-p1{
-    background-color: #28b93b;
+    // background-color: #28b93b;
+    fill:  #ffb703;
 }
 
 
 #avatar-p2{
-    background-color: #cf2e2e;
+    // background-color: #cf2e2e;
+    fill: #7c5cbf;
 }
 
 .try-again{
@@ -60,6 +62,10 @@
     align-items: flex-end;
     justify-content: flex-end;
       width: 100%;
+
+  h3{
+    margin-top: 15px;
+  }
   
   &__button {
     font-family: "Courier New", Courier, monospace;

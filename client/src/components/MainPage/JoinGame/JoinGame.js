@@ -21,17 +21,21 @@ function JoinGame(props) {
   // const [ isActiveButton, setIsActiveButton ] = useState(true);
   const [roomList, setRoomList] = useState([]);
 
+
   const getRoomList = async () => {
     try {
       const { data } = await axios.get(`/api/rooms/${gameType[1]}`, { headers: axiosAuth() });
       while (roomList.length) {
         roomList.pop();
       }
-      roomList.push(...data.rooms);
+      setRoomList(data.rooms)
+      // roomList.push(..data.rooms);
       console.log(roomList);
       setIsLoading(true);
     } catch (e) {}
   };
+
+
 
   useEffect(() => {
     if (fromMainPage) {
@@ -150,7 +154,10 @@ function JoinGame(props) {
               <div className="join-content">
                 {/* <div className="join-content">  */}
                 <div className="join-content__room-list" style={{overflowX: 'auto'}}>
-                <h2>Lista dostępnych pokoi</h2>
+                <div className="join-content__room-list-title">
+                <h2>Lista pokoi</h2>
+                <h2>{gameType[2]}</h2>
+                </div>
                   {roomList.map((room) => (
                     <div key={room._id} className="join-content__room-list--room">
                   

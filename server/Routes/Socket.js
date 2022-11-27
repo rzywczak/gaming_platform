@@ -75,12 +75,14 @@ const socketRouter = (httpServer) => {
     });
     socket.on("disconnectUser", async ({ username, roomname }, callback) => {
       const userInRoom = await UserInRoom.findByCredentials(username, roomname);
+      // console.log(userInRoom)
       try {
         if (userInRoom === null) {
           const usersNamesInRoom = await UserInRoom.findAllUsersInRoom(roomname);
           const whoIsConnected = await usersNamesInRoom.map((user) => user.userName);
-          socket.leave(roomname);
           io.to(roomname).emit("disconnect-info", whoIsConnected);
+          socket.leave(roomname);
+        
           // if roomName option exhist
           //  await PaperStoneScissors.deleteMany({roomName : room});
           return "Cant disconnect user";
@@ -98,10 +100,12 @@ const socketRouter = (httpServer) => {
         // console.log("AKTYWNE POKOJE Z DISKONEKTA PRZED: ");
         // console.log(socket.rooms);
         // console.log(socket.id)
+        io.to(roomname).emit("disconnect-info", whoIsConnected);
+        
 
         socket.leave(roomname);
-        io.to(roomname).emit("disconnect-info", whoIsConnected);
-
+        
+        
         await PaperStoneScissors.deleteMany({ roomName: roomname });
         await TicTacToe.deleteMany({ roomName: roomname });
         await FindAPair.deleteMany({ roomName: roomname });

@@ -11,7 +11,7 @@ function GameMenu(props) {
 
   return (
     <nav className="game-container-nav">
-      <div className="game-container-nav__title"><Link to={{ pathname: "/" }}><img src={icon} alt="Platforma Rozrywkowa"></img></Link></div>
+      <div className="game-container-nav__title"><Link to={{ pathname: "/" }}><img onClick={props.disconnectUser} src={icon} alt="Platforma Rozrywkowa"></img></Link></div>
       <div className="game-container-nav__menu">
         <ul>
         <div className="game-container-nav__menu--list-elements">

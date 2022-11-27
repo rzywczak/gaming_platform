@@ -13,7 +13,7 @@ const Board = (props) => {
   const color3Ref = useRef(null);
   const color4Ref = useRef(null);
   const color5Ref = useRef(null);
-  const color6Ref = useRef(null);
+
   const color7Ref = useRef(null);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const Board = (props) => {
       const color3 = color3Ref.current;
       const color4 = color4Ref.current;
       const color5 = color5Ref.current;
-      const color6 = color6Ref.current;
+  
       const color7 = color7Ref.current;
 
     const context = canvas.getContext('2d');
@@ -50,8 +50,7 @@ const Board = (props) => {
     color3.addEventListener('click', () => onColorUpdate("#34eb46"), false);
     color4.addEventListener('click',  () =>onColorUpdate("#3474eb"), false);
     color5.addEventListener('click', () => onColorUpdate("#ebc934"), false);
-    color6.addEventListener('click', () => onColorUpdate("white"), false);
-    color7.addEventListener('click', () => onColorUpdate("#ede4ca"), false);
+    color7.addEventListener('click', () => onColorUpdate("white"), false);
     }
     // loop through the color elements and add the click event listeners
 
@@ -65,7 +64,7 @@ const Board = (props) => {
       context.moveTo(x0, y0);
       context.lineTo(x1, y1);
       context.strokeStyle = color;
-      if(color==="#ede4ca"){
+      if(color==="white"){
         context.lineWidth = 25;
       }
       else{
@@ -160,7 +159,7 @@ const Board = (props) => {
   
 }, [props]);
 
-
+const GumkersIcon = () => { return  (<svg style={{width:'100%', height: '100%'}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M290.7 57.4L57.4 290.7c-25 25-25 65.5 0 90.5l80 80c12 12 28.3 18.7 45.3 18.7H288h9.4H512c17.7 0 32-14.3 32-32s-14.3-32-32-32H387.9L518.6 285.3c25-25 25-65.5 0-90.5L381.3 57.4c-25-25-65.5-25-90.5 0zM297.4 416H288l-105.4 0-80-80L227.3 211.3 364.7 348.7 297.4 416z"/></svg>)} 
   return (
     <div className="board">
 
@@ -173,13 +172,13 @@ const Board = (props) => {
         <>
       {(props.drawUser===props.userName) && 
         <div ref={colorsRef} className="colors"  style={{ position: "fixed"}}>
-        <div ref={color1Ref} className="color" style={{     height: "48px", width: "48px", background:"#2d2d30",     display: "flex" }} />
-        <div ref={color2Ref}  className="color" style={{     height: "48px", width: "48px", background:"#eb4034",   display: "flex" }} />
-        <div ref={color3Ref} className="color" style={{     height: "48px", width: "48px", background:"#34eb46",  display: "flex"  }} />
-        <div ref={color4Ref} className="color" style={{     height: "48px", width: "48px", background:"#3474eb",  display: "flex"  }}/>
-        <div  ref={color5Ref} className="color" style={{     height: "48px",width: "48px", background:"#ebc934" ,  display: "flex" }}/>
-         <div  ref={color6Ref} className="color" style={{     height: "48px",width: "48px", background:"white" ,  display: "flex" }}/>
-      <div  ref={color7Ref} className="color" style={{  display: "flex", fontFamily: "Courier New", alignItems: "center", userSelect: "none", marginTop: "15px",   height: "48px", width: "48px", background:"#ede4ca", border:"solid black 1px"}}>Gumka</div>
+        <div ref={color1Ref} className="color" style={{     height: "48px", width: "48px", background:"#2d2d30",     display: "flex", borderRadius: '25px',  marginTop: '5px', cursor: "pointer"}} />
+        <div ref={color2Ref}  className="color" style={{     height: "48px", width: "48px", background:"#eb4034",   display: "flex",borderRadius: '25px', marginTop: '5px', cursor: "pointer"}} />
+        <div ref={color3Ref} className="color" style={{     height: "48px", width: "48px", background:"#34eb46",  display: "flex",borderRadius: '25px', marginTop: '5px' , cursor: "pointer"}} />
+        <div ref={color4Ref} className="color" style={{     height: "48px", width: "48px", background:"#3474eb",  display: "flex",borderRadius: '25px',  marginTop: '5px' , cursor: "pointer"}}/>
+        <div  ref={color5Ref} className="color" style={{     height: "48px",width: "48px", background:"#ebc934" ,  display: "flex",borderRadius: '25px',  marginTop: '5px', cursor: "pointer"}}/>
+         {/* <div  ref={color6Ref} className="color" style={{     height: "48px",width: "48px", background:"white" ,  display: "flex" }}/> */}
+      <div  ref={color7Ref} className="color" style={{  display: "flex", fontFamily: "Courier New", alignItems: "center", userSelect: "none", marginTop: "15px",   height: "48px", width: "48px", background:"white", cursor: "pointer"}}><GumkersIcon/></div>
      </div>
       }
 

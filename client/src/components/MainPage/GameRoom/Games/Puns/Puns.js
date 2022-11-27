@@ -57,7 +57,7 @@ function Puns(props) {
         <div className="puns-data__info-draw">
          {props.otherPlayerTurn === false ? <div>Odpowiedź: {props.chosenWord} </div> 
          :
-         <div>  Teraz rysuje: {props.drawUser} </div> 
+         <div>Rysujący: {props.drawUser} </div> 
          }
          
         </div>

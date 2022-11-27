@@ -7,7 +7,7 @@ function Header(props) {
   return (
     <header className="header">
       <Link to={{ pathname: "/" }}>
-        <img className="header__logo" src={Logo} alt="Platforma Rozrywkowa"></img>
+        <img className="header__logo" src={Logo} alt="Platforma Rozrywkowa" ></img>
       </Link>
       {props.logged ? (
         <nav className="header__navbar">

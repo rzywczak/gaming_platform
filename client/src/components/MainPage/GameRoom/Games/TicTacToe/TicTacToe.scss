@@ -1,4 +1,4 @@
-
+@use "../../../../Colors/Colors.scss";
 
 .tictactoe-items {
 
@@ -15,11 +15,26 @@
 .tictactoe-item {
   flex: 0 0 32%;
   height: 32%;
-  font-size: 60px;
-  color: black;
+  // font-size: 10rem;
+  color: #391b72;
+  background-color: #7C5CBF;
+  span{
+
+  //  width: 90%;
+  //  height: 80%; 
+   font-size: 18vh;
+  }
+
 
 }
-
+.tictactoe-item:hover:enabled{
+  cursor: pointer;
+  background-color: #ffb703;
+  
+}
+.tictactoe-item:disabled{
+  background-color: #523e7e;
+}
 
 .try-again{
     display: flex;
@@ -28,23 +43,30 @@
     flex-direction: column;
     width: 100%;
 
-  &__button {
-    font-family: "Courier New", Courier, monospace;
-    cursor: pointer;
-    margin-bottom: 12px;
-    margin-top: 12px;
-    padding: 15px;
-    background-color: #7c5cbf;
-    border-radius: 15px;
-    color: rgb(0, 0, 0);
-    font-size: 16px;
-    font-weight: 600;
-    //   transition: background 0.3s ease;
-  }
-  &__button:hover {
-    cursor: pointer;
-    background-color: #ffb703;
-  }
+    &__button {
+      font-family: "Courier New", Courier, monospace;
+      cursor: pointer;
+      padding: 20px;
+      font-size: 22px;
+      max-width: 150px;
+      text-decoration: none;
+      font-weight: 600;
+      width: 100%;
+      margin-top: 55px;
+      background: Colors.$yellow;
+      border-radius: 25px;
+      color: Colors.$black;
+      transition: background 0.3s ease;
+      font-weight: 600;
+      border: none;
+      text-decoration: none;
+      //   transition: background 0.3s ease;
+    }
+    &__button:hover {
+      cursor: pointer;
+      background-color: #ffb703;
+    }
+  
   
 
 }

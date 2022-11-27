@@ -14,9 +14,18 @@
   height: 32%;
   font-size: 32px;
   z-index: 100;
+  background-color: #7C5CBF;
   &__img {
     pointer-events: none;
   }
+}
+
+.findapair-item:hover:enabled{
+  cursor: pointer;
+  background-color: #ffb703;
+}
+.findapair-item:disabled{
+  background-color: #523e7e;
 }
 
 .try-again{

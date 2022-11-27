@@ -1,22 +1,10 @@
 @use "../../../../Colors/Colors.scss";
  
 .board {
-  // z-index: -1;/
  position: relative;
+ background-color: white;
   height: 100%;
   width: 100%;
-}
-.whiteboard {
-//   position: absolute;
-// //   background: transparent;
-// //   overflow: hidden;
-//   height: 100%;
-//   width: 100%;
-//   left: 0;
-//   right: 0;
-//   bottom: 0;
-//   top: 0;
-  // z-index: -1;
 }
 
 .colors {
@@ -52,7 +40,7 @@
 
    &__iframe{
 
-  background-color: #ede4ca;
+  background-color: white;
     width: 80%;
     height: 100%;
     overflow: hidden;
@@ -60,53 +48,34 @@
 }
 .puns-data{
   display: flex;
-  // flex-direction: column;
   flex-wrap: wrap;
-  // align-items: space-between;
-  // justify-content: space-between;
   width: 20%;
   height: 100%;
-  // column-gap: 100px;
-  // row-gap: 100px;
-
+  background-color: #523e7e;
   &__info{
-  
-    
-    // display: flex;
-    // align-items: center;
-    // justify-content: center;
-    // flex-direction: row;
-
-
-
+    font-weight: 600;
   }
 
   &__info-draw{
+    margin-left: 15px;
+    margin-top: 15px;
     position: relative;
     max-width: 100%;
  
   }
 
   &__info-players-type{
-    
+    margin-left: 15px;
     margin-top: 20px;
 
   }
 
   &__form{
-
-   display: flex;
+  display: flex;
   align-items: flex-end;
   justify-content: flex-end;
-    width: 100%;
-
-
+  width: 100%;
   color: black;
-
-
-
-
-  
 
   &--input{
     width: 60%;
@@ -127,16 +96,10 @@
     font-weight: 600;
     transition: background 0.3s ease;
     
-
-
   }
   &--button:hover {
-    background-color: #FFB703;
+    background: #391B72;
   }
-
-
-
-
   }
 }
 
@@ -186,10 +149,5 @@
     &--button:hover {
       background: Colors.$purple;
     }
-
-
-
   }
-  
-
 }

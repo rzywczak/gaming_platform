@@ -27,6 +27,7 @@
     &--li {
       display: flex;
       align-items: center;
+      font-size: 22px;
       justify-content: center;
       margin: 20px;
       a {
@@ -67,10 +68,11 @@
     }
 
     .start-play {
-      padding: 10px 20px;
+      padding: 15px 30px;
       background: Colors.$yellow;
       border-radius: 15px;
       color: Colors.$black;
+      font-size: 18px;
       transition: background 0.3s ease;
     }
     .start-play:hover {

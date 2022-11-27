@@ -1,53 +1,80 @@
-.paperstonescissors{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    
+@use "../../../../Colors/Colors.scss";
+.paperstonescissors {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 
-    &__item{
-            font-family: "Courier New", Courier, monospace;
-            cursor: pointer;
-            margin-bottom: 12px;
-            margin-top: 12px;
-            padding: 15px;
-            background-color: #7c5cbf;
-            border-radius: 15px;
-            color: rgb(0, 0, 0);
-            font-size: 16px;
-            font-weight: 600;
-            margin-left: 12px;
-            //   transition: background 0.3s ease;
-          }
-          &__item:hover {
-            cursor: pointer;
-            background-color: #ffb703;
-          }
-          
+  &__item {
+    font-family: "Courier New", Courier, monospace;
+    // cursor: pointer;
+    margin-bottom: 12px;
+    margin-top: 12px;
+    padding: 15px;
+    // z-index: -10;
+    // position: absolute;
+    background-color: #7c5cbf;
+    border-radius: 15px;
+    color: rgb(0, 0, 0);
+    font-size: 16px;
+    font-weight: 600;
+    margin-left: 12px;
+    //   transition: background 0.3s ease;
+    svg {
+      // position: absolute;
+
+      height: 100%;
+      width: 100%;
+      fill: #391b72;
+      path {
+        height: 100%;
+        width: 100%;
+        fill: #391b72;
+      }
+    }
+  }
+  &__item:hover:enabled {
+    cursor: pointer;
+    background-color: #ffb703;
+  }
+
+  &__item-active {
+    background-color: #ffb703;
+    color: #ffb703;
+  }
+  &__item-active:disabled {
+    background-color: #ffb703;
+    color: #ffb703;
+  }
 }
-.paperstonescissors-info{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    flex-direction: column;
+.paperstonescissors-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  flex-direction: column;
 
-    &__button {
-        font-family: "Courier New", Courier, monospace;
-        cursor: pointer;
-        margin-bottom: 12px;
-        margin-top: 12px;
-        padding: 15px;
-        background-color: #7c5cbf;
-        border-radius: 15px;
-        color: rgb(0, 0, 0);
-        font-size: 16px;
-        font-weight: 600;
-        //   transition: background 0.3s ease;
-      }
-      &__button:hover {
-        cursor: pointer;
-        background-color: #ffb703;
-      }
-      
+  &__button {
+    font-family: "Courier New", Courier, monospace;
+    cursor: pointer;
+    padding: 20px;
+    font-size: 22px;
+    max-width: 150px;
+    text-decoration: none;
+    font-weight: 600;
+    width: 100%;
+    margin-top: 55px;
+    background: Colors.$yellow;
+    border-radius: 25px;
+    color: Colors.$black;
+    transition: background 0.3s ease;
+    font-weight: 600;
+    border: none;
+    text-decoration: none;
+    //   transition: background 0.3s ease;
+  }
+  &__button:hover {
+    cursor: pointer;
+    background-color: #ffb703;
+  }
 }

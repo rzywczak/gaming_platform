@@ -3,6 +3,8 @@ import Board from "./Board"
 import "./Maze.scss"
 
 
+
+
 function Maze(props) {
   return (
     <>
@@ -11,10 +13,13 @@ function Maze(props) {
      <Board props={props}></Board> 
      :
   
-     <div className="try-again">{props.winMessage} <button className="try-again__button"
+     <div className="try-again"><h1>{props.winMessage} </h1>
+      <h3>Za chwilę będzie możliwość ponownego rozegrania...</h3>
+     {/* <button className="try-again__button"
        onClick={() => props.playAgain()}
        >
-       Zagraj poownie</button> </div> 
+       Zagraj ponownie</button> */}
+        </div> 
      
      }
     

@@ -6,6 +6,7 @@
     flex-direction: row;
     width: 100vw;
     height: 88vh;
+ 
     // margin-left: 5vw;
     // max-width: 1160px;
     font-family: Colors.$font-stack;
@@ -19,6 +20,10 @@
         align-items: center;
         margin-bottom: 16px;
         color: Colors.$light_black;
+    }
+    &__room-list-title{
+      display: flex;
+      justify-content: space-between;
     }
 &__room-list{
   display: flex;
@@ -53,9 +58,10 @@
 
   }
   &--submit {
-
+    font-family: Colors.$font-stack;
     cursor: pointer;
     width: 15.5%;
+    font-weight: 600;
     // margin: 12px 40% 0 40% ;
     margin: 12px 0 0 12px;
     padding: 12px;
@@ -93,6 +99,7 @@
         background-color: #4c2a8b;
         padding: 15px 20px;
         border: none;
+        font-family: Colors.$font-stack;
         font-weight: 600;
 
       }
@@ -154,6 +161,7 @@
         justify-content: center;
         cursor: pointer;
         width: 25%;
+        font-family: Colors.$font-stack;
         margin: 12px 40% 0 40% ;
         padding: 12px;
         background: Colors.$dark_purple;
@@ -162,6 +170,7 @@
         text-decoration: none;
         font-weight: 600;
         border-radius: 25px;
+        
       }
       &--submit:hover {
         background: Colors.$purple;
@@ -200,6 +209,7 @@
         width: 25%;
         margin: 12px 40% 0 40% ;
         padding: 12px;
+        font-family: Colors.$font-stack;
         background: Colors.$dark_purple;
         border: none;
         color: Colors.$white;

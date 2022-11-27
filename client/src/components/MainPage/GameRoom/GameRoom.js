@@ -307,7 +307,6 @@ function GameRoom() {
     if (gameName[1] === "maze") {
 
 
-
       // setGenerateMazeAgain(true);
       // setResultMazeGameInfo(false)
 
@@ -317,12 +316,14 @@ function GameRoom() {
       //   console.log(callback)
       //   setUsersInMazeGame(callback)
       // })
-      
-      socket.on("usersInMazeGame", ({mazeData, sendMaze}) => {
-        // console.log(sendMaze)
-        setUsersInMazeGame(mazeData)
+      await delay(5000)
+
+      socket.emit("disconnectUser", data);
+      // socket.on("usersInMazeGame", ({mazeData, sendMaze}) => {
+      //   // console.log(sendMaze)
+      //   setUsersInMazeGame(mazeData)
     
-      })
+      // })
 
     
       // }
@@ -408,8 +409,12 @@ function GameRoom() {
   });
 
   // paperStone Scissors
-  const paperStoneScissors = async (userChoice) => {
+  const paperStoneScissors = async (userChoice,e) => {
     setIsUserButtonDisabled(true);
+    console.log(e)
+    e.currentTarget.classList.add('paperstonescissors__item-active');
+    console.log("TEST")
+    console.log(e)
     socket.emit("paperStoneScissors", { userChoice, userName, roomName });
     socket.on("result", (result) => {
       setFinishedGame(!finishedGame);
@@ -428,6 +433,7 @@ function GameRoom() {
     // console.log(userChoice)
     // setIsUserButtonDisabled(true)
     e.target.disabled = true;
+    // e.currentTarget.style.background = "#391b72"
     // e.target.value = 'X'
     socket.emit("ticTacToe", { userChoice, userName, roomName });
     socket.on("result", (result) => {
@@ -443,9 +449,9 @@ function GameRoom() {
     let change = newDisabledOption.find((a) => a.id === userPick);
     change.disable = true;
     if (type === 0) {
-      change.signType = "o";
+      change.signType = "O";
     } else {
-      change.signType = "x";
+      change.signType = "X";
     }
 
     setDisabledOption(newDisabledOption);
@@ -522,13 +528,15 @@ function GameRoom() {
 
   const puns = async (e, data) => {
     e.preventDefault();
+  
     e.target[0].value = ""
     // console.log(data)
-
+    
     if(data.chosenWord.lenght>=1){
       // setOtherPlayerTurn(false)
      setFinishedGame(false)
     }
+   
 
      socket.emit("puns", ({data: data,finishedTurn: false,roomName: roomName}));
     //  if(data.userAnswer.length>=1){
@@ -552,6 +560,7 @@ function GameRoom() {
     // console.log(endRound, loadedMaze, loadedDataMaze, playAgainInfo, generatedMaze.length)
     if(((gameName[1]==='maze' && users.length===2 && generatedMaze.length===0)) || generateMazeAgain){
       setGenerateMazeAgain(false)
+
 
   
     socket.emit("maze", ({ userName: userName, roomName: roomName, loadedMaze: loadedMaze, endRound: endRound, winner: winner, resultMazeGameInfo: resultMazeGameInfo}))
@@ -665,14 +674,16 @@ function GameRoom() {
 
 useEffect(() => {
 
-  const endMazeRound = () => {
+  const endMazeRound = async () => {
     setEndRound(true)
 
-
+    
   
-    socket.on("maze", data => {
+    socket.on("maze", async date => {
   
-      setWinMessage(`${data.message} ${data.winner}`)
+      setWinMessage(`${date.message} ${date.winner}`)
+      await delay(5000)
+      window.location.reload(true)
 
     }) 
 
@@ -687,6 +698,8 @@ useEffect(() => {
     setCordsPlayer2([0,11])
 
     socket.emit("maze", ({ userName: userName, roomName: roomName, loadedMaze: loadedMaze, endRound: endRound, winner: winner, resultMazeGameInfo: resultMazeGameInfo}))
+   
+
   }
 
   if(currentPosition===11||currentPositionPlayer2===11){
@@ -779,7 +792,7 @@ useEffect(() => {
               )}
               {howManyConnectedUsers === 1 && !finishedGame && users.filter((user) => user === userName).length === 1 && (
                 <div className="game-container__board--waiting">
-                  <div className="game-container__board--waiting-info">Waiting for opponent...</div>
+                  <div className="game-container__board--waiting-info">Oczekiwanie na przeciwnika...</div>
                 </div>
               )}
               {(howManyConnectedUsers === 2 || finishedGame) && users.filter((user) => user === userName).length === 1 && (
