@@ -25,6 +25,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+   
         &--avatar{
           
             width: 30%;
@@ -48,12 +49,14 @@
 
 #avatar-p1{
     // background-color: #28b93b;
+    max-height: 30px;
     fill:  #ffb703;
 }
 
 
 #avatar-p2{
     // background-color: #cf2e2e;
+    max-height: 30px;
     fill: #7c5cbf;
 }
 

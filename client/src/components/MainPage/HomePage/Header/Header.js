@@ -31,7 +31,7 @@ function Header(props) {
               <Link to={{ pathname: "/about" }}>O platformie</Link>
             </li>
             <li className="header__navbar--li">
-              <Link to={{ pathname: "/how-to-play" }}>Jak Grać</Link>
+              <Link to={{ pathname: "/how-to-play" }}>Jak grać</Link>
             </li>
             <li className="header__navbar--li">
               <Link className="start-play" to={{ pathname: "/login" }}>

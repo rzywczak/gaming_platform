@@ -34,3 +34,5 @@ app.use(express.static(publicDirectoryPath));
 server.listen(port, () => {
   console.log("Working on port " + port);
 });
+
+module.exports = server

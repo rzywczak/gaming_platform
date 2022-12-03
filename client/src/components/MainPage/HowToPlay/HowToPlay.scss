@@ -1,15 +1,29 @@
 @use "../../Colors/Colors.scss";
 
-// .main-content {
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   flex-direction: column;
-//   height: 80vh;
-//   width: 100%;
-//   background: Colors.$light_purple;
-//   color: Colors.$white;
+.instruction{
 
+    &__buttons{
 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+     
+        &--button{
+            cursor: pointer;
+            // width: 25%;
+            margin: 0 3px 0 0;
+            padding: 10px 20px;
+            background: Colors.$dark_purple;
+            border: none;
+            color: Colors.$white;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 25px;
+        }
+        &--button:hover{
+            background: #7C5CBF;
+          
+        }
+    }
+}
 
-// }

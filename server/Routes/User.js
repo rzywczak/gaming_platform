@@ -10,7 +10,7 @@ const router = new express.Router();
 router.post("/api/users", async (req, res) => {
   const user = new User(req.body);
   try {
-    console.log(req.body)
+    // console.log(req.body)
     await user.save();
 
     const token = await user.generateAuthToken();
