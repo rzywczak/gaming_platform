@@ -1,5 +1,10 @@
 ﻿# Platforma_rozrywkowa
-Aplikacja webowa, na której będzie możliwe rozgrywanie gier w popularne gry logiczne takie jak "labirynt", "kółko i krzyżyk", "znajdź parę", "papier, kamień i nożyce" i 'kalambury'
+Aplikacja webowa, na której będzie możliwe rozgrywanie gier w popularne gry logiczne takie jak 
+- "labirynt", 
+- "kółko i krzyżyk", 
+- "znajdź parę", 
+- "papier, kamień i nożyce",
+- "kalambury"
 
 ## Jak uruchomić aplikację
 1. Pobierz aplikację i otwórz folder główny w konsoli
@@ -91,13 +96,11 @@ Aplikacja webowa, na której będzie możliwe rozgrywanie gier w popularne gry l
 
 ![image](https://user-images.githubusercontent.com/73279676/206425482-8f6a8c88-3d5e-4761-a38a-c3080468ece8.png)
 
-7. Po dołączeniu dwóch graczy ( Labirynt )
-
-  7.2 Wygenerowanie labiryntu i ropoczęcie rozgrywki
+7. Po dołączeniu dwóch graczy wygenerowanie labiryntu i ropoczęcie rozgrywki ( Labirynt )
   
 ![image](https://user-images.githubusercontent.com/73279676/206425174-f9725605-89db-4383-9757-56267d6b15bd.png)
 
-  7.3 Ukazanie zwycięzcy oraz ponowne rozpoczęcie gry
+8. Ukazanie zwycięzcy oraz ponowne rozpoczęcie gry ( Labirynt )
   
 ![image](https://user-images.githubusercontent.com/73279676/206425366-25cd6162-4f85-4638-aa99-088dace5b7df.png)
 
