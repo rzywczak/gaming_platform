@@ -40,7 +40,7 @@ useEffect(() => {
 
       if (authResult.Authorization !== null) {
         try {
-            await axios.post(`http://localhost:5000/api/rooms`, 
+            await axios.post(`/api/rooms`, 
             {
               ...values
             },
