@@ -62,6 +62,8 @@ Aplikacja webowa, na której będzie możliwe rozgrywanie gier w popularne gry l
     
 ## Jak aplikacja wygląda obecnie
 
+0. Link do platformy:  https://platforma-rozrywkowa.herokuapp.com/
+
 1. Strona główna
 
 ![image](https://user-images.githubusercontent.com/73279676/206421843-8eeed346-5495-435d-93bd-c6899c2a83c4.png)
