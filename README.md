@@ -87,25 +87,18 @@ Aplikacja webowa, na której będzie możliwe rozgrywanie gier w popularne gry l
 
 ![image](https://user-images.githubusercontent.com/73279676/206422608-7c00d47f-5056-48fb-8080-84bdb17a5cf1.png)
 
-8. Po dołączeniu do gry jednego gracza  ( Kalambury )
+8. Po dołączeniu do gry jednego gracza  ( Labirynt )
 
-![image](https://user-images.githubusercontent.com/73279676/206422659-4fa771e5-95c1-42b8-87e1-6e356301eb37.png)
+![image](https://user-images.githubusercontent.com/73279676/206425482-8f6a8c88-3d5e-4761-a38a-c3080468ece8.png)
 
-7. Po dołączeniu dwóch graczy ( Kalambury )
+7. Po dołączeniu dwóch graczy ( Labirynt )
 
-  7.1 Oczekiwanie na wybranie hasła
+  7.2 Wygenerowanie labiryntu i ropoczęcie rozgrywki
   
-![image](https://user-images.githubusercontent.com/73279676/206423251-9c0143b9-d475-473d-807b-c58dc37e878b.png)
+![image](https://user-images.githubusercontent.com/73279676/206425174-f9725605-89db-4383-9757-56267d6b15bd.png)
 
-  7.2 Wpisywanie hasła
+  7.3 Ukazanie zwycięzcy oraz ponowne rozpoczęcie gry
   
-![image](https://user-images.githubusercontent.com/73279676/206423452-d7ca065e-ef10-4883-9e16-c8ff7b9de3f1.png)
+![image](https://user-images.githubusercontent.com/73279676/206425366-25cd6162-4f85-4638-aa99-088dace5b7df.png)
 
-  7.3 Gracz rysujący
-  
-![image](https://user-images.githubusercontent.com/73279676/206423840-ec67724c-0aa9-4d3f-979e-50efb1771ea0.png)
-
-  7.4 Gracz zgadujący hasło
-  
-![image](https://user-images.githubusercontent.com/73279676/206423978-9e268123-2d70-4d4d-8ce8-5f862361fe43.png)
 
