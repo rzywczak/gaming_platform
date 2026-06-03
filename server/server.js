@@ -13,14 +13,28 @@ const app = express();
 const server = http.createServer(app);
 
 const defaultOrigins = ["http://localhost:3000", "http://localhost:5000"];
-const allowedOrigins = (process.env.CORS_ORIGINS || defaultOrigins.join(","))
+const configuredOrigins = (process.env.CORS_ORIGINS || "")
   .split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);
+const allowedOrigins = [
+  ...defaultOrigins,
+  ...configuredOrigins,
+  process.env.RENDER_EXTERNAL_URL,
+].filter(Boolean);
+const hasConfiguredOrigins = configuredOrigins.length > 0 || Boolean(process.env.RENDER_EXTERNAL_URL);
+
+const corsOrigin = (origin, callback) => {
+  if (!origin || allowedOrigins.includes(origin) || !hasConfiguredOrigins) {
+    return callback(null, true);
+  }
+
+  return callback(null, false);
+};
 
 socketServer(server, {
   cors: {
-    origin: allowedOrigins,
+    origin: corsOrigin,
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -31,13 +45,7 @@ const port = process.env.PORT || 5000;
 const publicDirectoryPath = path.join(__dirname, "/public");
 
 const corsOptions = {
-  origin(origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-
-    return callback(new Error(`CORS blocked for origin: ${origin}`));
-  },
+  origin: corsOrigin,
   methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
   credentials: true,
 };
