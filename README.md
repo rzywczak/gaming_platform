@@ -69,7 +69,7 @@ Szczegóły są w `DEPLOYMENT.md`.
     
 ## Jak aplikacja wygląda obecnie
 
-0. Dawny link Heroku:  https://platforma-rozrywkowa.herokuapp.com/
+0. Link do aplikacji: https://gaming-platform-fhgm.onrender.com/
 
 1. Strona główna
 
