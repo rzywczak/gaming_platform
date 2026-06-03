@@ -26,9 +26,13 @@ const socketRouter = (httpServer, options = {}) => {
   io.on("connection", (socket) => {
     console.log("WebSocket connection");
 
-    socket.on("join-game", async ({ username, roomname, gamename, cardArray }, callback) => {
-      const isRoomExist = await UserInRoom.findByCredentials(username, roomname);
+    socket.on("join-game", async ({ username, roomname, gamename, cardArray }, callback = () => {}) => {
       try {
+        if (!username || !roomname || !gamename?.[1]) {
+          return callback("Brakuje danych gracza lub pokoju. Wroc do wyboru gry i sproboj ponownie.");
+        }
+
+        const isRoomExist = await UserInRoom.findByCredentials(username, roomname);
         if (isRoomExist !== null) {
           return callback("Unable to join !");
         }
@@ -53,6 +57,7 @@ const socketRouter = (httpServer, options = {}) => {
         callback();
       } catch (e) {
         console.log(e);
+        callback(e.message || "Nie udalo sie dolaczyc do gry. Sprobuj ponownie.");
       }
     });
     socket.on("disconnectUser", async ({ username, roomname }, callback) => {
