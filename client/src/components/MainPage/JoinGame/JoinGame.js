@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import "./JoinGame.scss";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -9,20 +9,48 @@ import axios from "axios";
 import Header from "../HomePage/Header/Header";
 // const socket = io();
 
+const games = {
+  ticTacToe: { 1: "ticTacToe", 2: "KĂłĹ‚ko i krzyĹĽyk" },
+  paperStoneScissors: { 1: "paperStoneScissors", 2: "Papier, kamieĹ„ i noĹĽyce" },
+  maze: { 1: "maze", 2: "RozwiÄ…ĹĽ labirynt" },
+  puns: { 1: "puns", 2: "Kalambury" },
+  findAPair: { 1: "findAPair", 2: "ZnajdĹş parÄ™" },
+};
+
+const getGameTypeFromStorage = () => {
+  try {
+    const storedGameType = sessionStorage.getItem("selectedGameType");
+    return storedGameType ? JSON.parse(storedGameType) : undefined;
+  } catch (error) {
+    sessionStorage.removeItem("selectedGameType");
+    return undefined;
+  }
+};
+
 function JoinGame(props) {
   const location = useLocation();
   const navigate = useNavigate();
+  const gameTypeFromQuery = new URLSearchParams(location.search).get("game");
+  const stateGameType = location.state?.gameType;
+  const gameType = useMemo(
+    () => stateGameType || games[gameTypeFromQuery] || getGameTypeFromStorage(),
+    [stateGameType, gameTypeFromQuery]
+  );
 
   const [isLoading, setIsLoading] = useState(false);
-  const { gameType } = location.state || "wronga data";
   const [fromMainPage, setFromMainPage] = useState(props.fromMainPage);
   const [createRoomButton, setCreateRoomButton] = useState(true);
   const [isDisabledCreateRoomButton, setIsDisabledCreateRoomButton] = useState(true);
   // const [ isActiveButton, setIsActiveButton ] = useState(true);
   const [roomList, setRoomList] = useState([]);
+  const [values, setValues] = useState({ roomName: "", password: "", gameType: gameType?.[1] || "" });
 
 
   const getRoomList = async () => {
+    if (!gameType?.[1]) {
+      return;
+    }
+
     try {
       const { data } = await axios.get(`/api/rooms/${gameType[1]}`, { headers: axiosAuth() });
       while (roomList.length) {
@@ -53,6 +81,8 @@ function JoinGame(props) {
           navigate("/");
           return;
         }
+        sessionStorage.setItem("selectedGameType", JSON.stringify(gameType));
+        setValues((currentValues) => ({ ...currentValues, gameType: gameType[1] }));
 
         getRoomList();
       } catch (error) {
@@ -67,7 +97,6 @@ function JoinGame(props) {
   //   gameType = {1: "noSelectedRoom", 2: "noSelectedRoom"};
   // }
 
-  const [values, setValues] = useState({ roomName: "", password: "" , gameType: gameType[1]});
   const username = localStorage.getItem("username") || "please login";
 
   const joingameSubmit = async (e) => {

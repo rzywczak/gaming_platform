@@ -14,7 +14,7 @@ function MainContent(props) {
 
             <Link
               className="main-content__game-panel--game-type"
-              to={{ pathname: "/join-game" }}
+              to={{ pathname: "/join-game", search: "?game=ticTacToe" }}
               state={{ gameType: props.games.ticTacToe }}
             >
               {props.games.ticTacToe[2]}
@@ -22,7 +22,7 @@ function MainContent(props) {
 
             <Link
               className="main-content__game-panel--game-type"
-              to={{ pathname: "/join-game" }}
+              to={{ pathname: "/join-game", search: "?game=paperStoneScissors" }}
               state={{ gameType: props.games.paperStoneScissors }}
             >
               {props.games.paperStoneScissors[2]}
@@ -30,7 +30,7 @@ function MainContent(props) {
 
             <Link
               className="main-content__game-panel--game-type"
-              to={{ pathname: "/join-game" }}
+              to={{ pathname: "/join-game", search: "?game=findAPair" }}
               state={{ gameType: props.games.findAPair }}
             >
               {props.games.findAPair[2]}
@@ -38,14 +38,14 @@ function MainContent(props) {
 
             <Link
               className="main-content__game-panel--game-type"
-              to={{ pathname: "/join-game" }}
+              to={{ pathname: "/join-game", search: "?game=puns" }}
               state={{ gameType: props.games.puns }}
             >
               {props.games.puns[2]}
             </Link>
             <Link
               className="main-content__game-panel--game-type"
-              to={{ pathname: "/join-game" }}
+              to={{ pathname: "/join-game", search: "?game=maze" }}
               state={{ gameType: props.games.maze }}
             >
               {props.games.maze[2]}
