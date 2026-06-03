@@ -14,6 +14,17 @@ const socketRouter = (httpServer, options = {}) => {
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+  Promise.all([
+    UserInRoom.deleteMany({}),
+    PaperStoneScissors.deleteMany({}),
+    TicTacToe.deleteMany({}),
+    FindAPair.deleteMany({}),
+    Puns.deleteMany({}),
+    Maze.deleteMany({}),
+  ]).catch((error) => {
+    console.log("Unable to clear stale game sessions", error.message);
+  });
+
  
   // tictactoe
   const winStates = ["012", "345", "678", "036", "147", "258", "048", "246"];
