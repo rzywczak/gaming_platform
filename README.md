@@ -12,6 +12,13 @@ Aplikacja webowa, na której będzie możliwe rozgrywanie gier w popularne gry l
 3. Uruchom aplikację lokalnie używając komendy 'npm run dev' dla serwera i 'npm run start' dla clienta
 4. Otwórz w oknie przeglądarki wpisując 'http://localhost:3000'
 
+## Hosting
+1. Ustaw zmienne środowiskowe z `server/.env.example` w panelu hostingu.
+2. Użyj komendy builda `npm run build` z katalogu głównego repozytorium.
+3. Użyj komendy startu `npm start` z katalogu głównego repozytorium.
+
+Szczegóły są w `DEPLOYMENT.md`.
+
 ## Jak grać 
 1. Zarejestruj się lub zaloguj
 2. Wybierz typ gry
@@ -62,7 +69,7 @@ Aplikacja webowa, na której będzie możliwe rozgrywanie gier w popularne gry l
     
 ## Jak aplikacja wygląda obecnie
 
-0. Link do platformy:  https://platforma-rozrywkowa.herokuapp.com/
+0. Dawny link Heroku:  https://platforma-rozrywkowa.herokuapp.com/
 
 1. Strona główna
 

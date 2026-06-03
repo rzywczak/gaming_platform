@@ -21,7 +21,8 @@ import eyeFour from "../../../img/findapair/eye_four.png";
 import eyeFive from "../../../img/findapair/eye_five.png";
 import eyeSix from "../../../img/findapair/eye_six.png";
 
-const socket = io();
+const socketEndpoint = process.env.REACT_APP_SOCKET_URL || undefined;
+const socket = io(socketEndpoint);
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 

@@ -9,8 +9,8 @@ const { deleteMany } = require("../Models/UserInRoomModel");
 const generator = require('generate-maze');
 const { findOne } = require("../Models/MazeModel");
 
-const socketRouter = (httpServer) => {
-  const io = new Server(httpServer);
+const socketRouter = (httpServer, options = {}) => {
+  const io = new Server(httpServer, options);
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 

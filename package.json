@@ -1,0 +1,12 @@
+{
+  "name": "gaming-platform-deploy",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "npm --prefix server ci && npm --prefix client ci && npm --prefix client run build:server",
+    "start": "npm --prefix server start"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
