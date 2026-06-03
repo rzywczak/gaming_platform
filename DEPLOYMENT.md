@@ -34,6 +34,7 @@ npm start
    - Runtime: `Node`
    - Build command: `npm run build`
    - Start command: `npm start`
+   - Node version: `20.18.0`
 4. Add environment variables:
    - `MONGO_URL=mongodb+srv://USER:PASSWORD@HOST/gaming_platform?retryWrites=true&w=majority&appName=Cluster0`
    - `JWT_SECRET=replace-with-a-long-random-secret`
